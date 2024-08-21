@@ -81,6 +81,20 @@ If = "if"
 Else = "else"
 While = "while"
 For = "for"
+Abstract = "abstract"
+Int = "int"
+Double = "double"
+New = "new"
+Default = "default"
+Boolean = "boolean"
+Do = "do"
+Private = "private"
+This = "this"
+Break = "break"
+Throw = "throw"
+Public = "public"
+Case = "case"
+
 
 
 /* ------------------------ OTROS TOKENS ------------------- */
