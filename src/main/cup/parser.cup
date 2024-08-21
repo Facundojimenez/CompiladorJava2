@@ -41,7 +41,35 @@ terminal IF;
 terminal ELSE;
 terminal WHILE;
 terminal FOR;
-
+terminal ABSTRACT
+terminal INT
+terminal DOUBLE
+terminal NEW
+terminal DEFAULT
+terminal BOOLEAN
+terminal DO
+terminal PRIVATE
+terminal THIS
+terminal BREAK
+terminal THROW
+terminal PUBLIC
+terminal CASE
+terminal CONTINUE
+terminal PROTECTED
+terminal IMPORT
+terminal RETURN
+terminal CATCH
+terminal SHORT
+terminal TRY
+terminal CHAR
+terminal INTERFACE
+terminal STATIC
+terminal VOID
+terminal CLASS
+terminal FINALLY
+terminal LONG
+terminal CONST
+terminal FLOAT
 
 
 /* ------------------------ OTROS TOKENS ------------------- */
