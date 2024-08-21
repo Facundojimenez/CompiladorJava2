@@ -7,6 +7,25 @@ class Parser;
 
 // Terminals
 
+/* ------------------------ PALABRAS RESERVADAS BLOQUES ------------- */
+
+terminal SI;
+terminal SINO;
+terminal MIENTRAS;
+terminal INIT;
+
+/* ------------ PALABRAS RESERVADAS TIPOS DE DATOS ------------------- */
+
+terminal INT;
+terminal FLOAT;
+terminal STRING;
+
+/* ----------- PALABRAS RESERVADAS ENTRADA / SALIDA ---------------- */
+
+terminal LEER;
+terminal ESCRIBIR;
+
+
 /* ----------------------- OPERADORES ARITMETICOS -----------------------*/
 
 terminal ASSIG;
@@ -24,30 +43,29 @@ terminal GREATER_THAN;
 terminal GREATER_THAN_EQUAL;
 terminal LESS_THAN;
 terminal LESS_THAN_EQUAL;
+terminal AND;
+terminal OR;
+terminal NOT;
 
 
 /* ------------------------ TOKEN DE BLOQUES Y AGRUPAMIENTO ------------- */
 
 terminal OPEN_BRACKET;
 terminal CLOSE_BRACKET;
-terminal OPEN_SQUARE_BRACKET;
-terminal CLOSE_SQUARE_BRACKET;
 terminal OPEN_CURLY_BRACKET;
 terminal CLOSE_CURLY_BRACKET;
 
-/* ------------------------ PALABRAS RESERVADAS ------------- */
 
-terminal IF;
-terminal ELSE;
-terminal WHILE;
-terminal FOR;
+/* -------------------------  IDENTIFICADOR ------------------------- */
 
-
-
-/* ------------------------ OTROS TOKENS ------------------- */
-
-terminal INTEGER_CONSTANT;
 terminal IDENTIFIER;
+
+/* ------------------------- CONSTANTES ------------------------- */
+terminal INTEGER_CONSTANT;
+terminal FLOAT_CONSTANT;
+terminal STRING_CONSTANT;
+
+
 
 // Non Terminals
 non terminal sentence;

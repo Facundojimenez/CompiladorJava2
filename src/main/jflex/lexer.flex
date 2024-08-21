@@ -5,6 +5,10 @@ import lyc.compiler.ParserSym;
 import lyc.compiler.model.*;
 import static lyc.compiler.constants.Constants.*;
 
+import static lyc.compiler.constants.Constants.STRING_MAX_LENGTH;
+import static lyc.compiler.constants.Constants.ID_MAX_LENGTH;
+
+
 %%
 
 %public
@@ -49,13 +53,31 @@ Identation =  [ \t\f]
 Letter = [a-zA-Z]
 Digit = [0-9]
 
+/* ------------------------ PALABRAS RESERVADAS BLOQUES -------------------- */
+
+Si = "si"
+Sino = "sino"
+Mientras = "mientras"
+Init = "init"
+
+/* ------------ PALABRAS RESERVADAS TIPOS DE DATOS ------------------- */
+
+Int = "int"
+Float = "float"
+String = "string"
+
+/* ----------- PALABRAS RESERVADAS ENTRADA / SALIDA ---------------- */
+
+Leer = "leer"
+Escribir = "escribir"
+
 /* ----------------------- OPERADORES ARITMETICOS -----------------------*/
 
 Plus = "+"
 Mult = "*"
 Sub = "-"
 Div = "/"
-Assig = "="
+Assig = ":="
 
 /* ------------------------ OPERADORES LOGICOS -------------------------- */
 
@@ -65,66 +87,35 @@ GreaterThan = ">"
 GreaterEqualThan = ">="
 LessThan = "<"
 LessEqual = "<="
+And="AND"
+Or="OR"
+Not="NOT"
 
 /* ------------------------ TOKEN DE BLOQUES Y AGRUPAMIENTO ------------- */
 
 OpenBracket = "("
 CloseBracket = ")"
-OpenSquareBracket = "["
-CloseSquareBracket = "]"
 OpenCurlyBracket = "{"
 CloseCurlyBracket = "}"
 
-/* ------------------------ PALABRAS RESERVADAS ------------- */
 
-If = "if"
-Else = "else"
-While = "while"
-For = "for"
-Abstract = "abstract"
-Int = "int"
-Double = "double"
-New = "new"
-Default = "default"
-Boolean = "boolean"
-Do = "do"
-Private = "private"
-This = "this"
-Break = "break"
-Throw = "throw"
-Public = "public"
-Case = "case"
-Continue = "continue"
-Protected = "protected"
-Import = "import"
-Case = "case"
-Return = "return"
-Catch = "catch"
-Short = "short"
-Try = "try"
-Char = "char"
-Interface = "interface"
-Static = "static"
-Void = "void"
-Class = "class"
-Finally = "finally"
-Long = "long"
-Const = "const"
-Float = "float"
-
-
-/* ------------------------ OTROS TOKENS ------------------- */
+/* -------------------------  IDENTIFICADOR ------------------------- */
 
 Identifier = {Letter} ({Letter}|{Digit})*
+
+  /* ------------------------- CONSTANTES ------------------------- */
+
 IntegerConstant = {Digit}+
 RealConstant = {Digit}+ "." {Digit}+
-Character = {Letter}
+StringConstant = "\""({Letter}|{Digit})*"\""
+
+Character = {Letter} //???????????
 
 
 /* ----------------------- Elementos que se detectan pero NO producen TOKENS ------------------- */
 
 WhiteSpace = {LineTerminator} | {Identation}
-Comment = "/*"({Letter}|{Digit})*"*/"
+Comment = "*-"({Letter}|{Digit}|{WhiteSpace})*"-*"
 
 %%
 
@@ -145,42 +136,71 @@ Comment = "/*"({Letter}|{Digit})*"*/"
 
 	/* ------------------------ PALABRAS RESERVADAS (van SIEMPRE arriba de ID o CTE porque tienen mayor prioridad de ser detectadas primero) ------------- */
 
-	{If}                                    		{ return symbol(ParserSym.IF); }
-	{Else}                                    	{ return symbol(ParserSym.ELSE); }
-	{While}                                   	{ return symbol(ParserSym.WHILE); }
-	{For}                                    	{ return symbol(ParserSym.FOR); }
+	{Si}                                    { return symbol(ParserSym.SI); }
+	{Sino}                                  { return symbol(ParserSym.SINO); }
+	{Mientras}                              { return symbol(ParserSym.MIENTRAS); }
+	{Init}                                  { return symbol(ParserSym.INIT); }
+
+	/* ------------------------ PALABRAS RESERVADAS TIPOS DE DATOS ------------------- */
+
+	{Int}                                   { return symbol(ParserSym.INT); }
+	{Float}                                 { return symbol(ParserSym.FLOAT); }
+	{String}                                { return symbol(ParserSym.STRING); }
 
 
-  /* -------------------------  identifiers ------------------------- */
-  {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
+	/* ----------------------- PALABRAS RESERVADAS ENTRADA / SALIDA ------------------------ */
 
-  /* ------------------------- Constants ------------------------- */
-  {IntegerConstant}                        { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
+	{Leer}                                  { return symbol(ParserSym.LEER); }
+	{Escribir}                              { return symbol(ParserSym.ESCRIBIR); }
 
-  /* ----------------------- OPERADORES ARITMETICOS -----------------------*/
-  {Plus}                                    { return symbol(ParserSym.PLUS); }
-  {Sub}                                     { return symbol(ParserSym.SUB); }
-  {Mult}                                    { return symbol(ParserSym.MULT); }
-  {Div}                                     { return symbol(ParserSym.DIV); }
-  {Assig}                                   { return symbol(ParserSym.ASSIG); }
+
+  /* -----------------------  OPERADORES ARITMETICOS -----------------------*/
+  {Plus}                                  { return symbol(ParserSym.PLUS); }
+  {Sub}                                   { return symbol(ParserSym.SUB); }
+  {Mult}                                  { return symbol(ParserSym.MULT); }
+  {Div}                                   { return symbol(ParserSym.DIV); }
+  {Assig}                                 { return symbol(ParserSym.ASSIG); }
 
   /* ------------------------ OPERADORES LOGICOS -------------------------- */
-  {Equal}                                       { return symbol(ParserSym.EQUAL); }
-  {NotEqual}                                    { return symbol(ParserSym.NOT_EQUAL); }
-  {GreaterThan}                                 { return symbol(ParserSym.GREATER_THAN); }
-  {GreaterEqualThan}                            { return symbol(ParserSym.GREATER_THAN_EQUAL); }
-  {LessThan}                                    { return symbol(ParserSym.LESS_THAN); }
-  {LessEqual}                                   { return symbol(ParserSym.LESS_THAN_EQUAL); }
+  {Equal}                                 { return symbol(ParserSym.EQUAL); }
+  {NotEqual}                              { return symbol(ParserSym.NOT_EQUAL); }
+  {GreaterThan}                           { return symbol(ParserSym.GREATER_THAN); }
+  {GreaterEqualThan}                      { return symbol(ParserSym.GREATER_THAN_EQUAL); }
+  {LessThan}                              { return symbol(ParserSym.LESS_THAN); }
+  {LessEqual}                             { return symbol(ParserSym.LESS_THAN_EQUAL); }
+  {And}                                 	{ return symbol(ParserSym.AND); }
+  {Or}                                		{ return symbol(ParserSym.OR); }
+  {Not}                                		{ return symbol(ParserSym.NOT); }
 
 
   /* ------------------------ TOKEN DE BLOQUES Y AGRUPAMIENTO ------------- */
-  {OpenBracket}                             { return symbol(ParserSym.OPEN_BRACKET); }
-  {CloseBracket}                            { return symbol(ParserSym.CLOSE_BRACKET); }
-  {OpenSquareBracket}                            { return symbol(ParserSym.OPEN_SQUARE_BRACKET); }
-  {CloseSquareBracket}                            { return symbol(ParserSym.CLOSE_SQUARE_BRACKET); }
-  {OpenCurlyBracket}                            { return symbol(ParserSym.OPEN_CURLY_BRACKET); }
-  {CloseCurlyBracket}                            { return symbol(ParserSym.CLOSE_CURLY_BRACKET); }
+  {OpenBracket}                           { return symbol(ParserSym.OPEN_BRACKET); }
+  {CloseBracket}                          { return symbol(ParserSym.CLOSE_BRACKET); }
+  {OpenCurlyBracket}                      { return symbol(ParserSym.OPEN_CURLY_BRACKET); }
+  {CloseCurlyBracket}                     { return symbol(ParserSym.CLOSE_CURLY_BRACKET); }
 
+	/* -------------------------  IDENTIFICADOR ------------------------- */
+  {Identifier}                            { 
+																						int largoCadena = yytext().length();
+																						if(largoCadena > ID_MAX_LENGTH){
+																							throw new InvalidLengthException("El largo máximo de una Identificador es 30. Largo del identificador: " + largoCadena);
+																						}
+
+																						return symbol(ParserSym.IDENTIFIER, yytext());
+																					}
+
+  /* ------------------------- CONSTANTES ------------------------- */
+  {IntegerConstant}                       { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
+  {RealConstant}                        	{ return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
+  {StringConstant}                       	{ 
+
+																						int largoCadena = yytext().length();
+																						if(largoCadena > STRING_MAX_LENGTH){
+																							throw new InvalidLengthException("El largo máximo de una constante String es 40. Largo de la cadena: " + largoCadena);
+																						}
+
+																						return symbol(ParserSym.STRING_CONSTANT, yytext());
+																					}
 
 
   /* ----------------------- Elementos que se detectan pero NO producen TOKENS ------------------- */
