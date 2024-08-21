@@ -17,7 +17,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static lyc.compiler.constants.Constants.MAX_LENGTH;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
+// Quitar la linea de abajo para habilitar los tests antes de compilar (por defecto están deshabilitados hasta que los hagamos funcionar)
 @Disabled
 public class LexerTest {
 

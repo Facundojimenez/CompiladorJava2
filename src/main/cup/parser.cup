@@ -6,13 +6,46 @@ class Parser;
 
 
 // Terminals
+
+/* ----------------------- OPERADORES ARITMETICOS -----------------------*/
+
 terminal ASSIG;
 terminal PLUS;
 terminal SUB;
 terminal MULT;
 terminal DIV;
+
+
+/* ------------------------ OPERADORES LOGICOS -------------------------- */
+
+terminal EQUAL;
+terminal NOT_EQUAL;
+terminal GREATER_THAN;
+terminal GREATER_THAN_EQUAL;
+terminal LESS_THAN;
+terminal LESS_THAN_EQUAL;
+
+
+/* ------------------------ TOKEN DE BLOQUES Y AGRUPAMIENTO ------------- */
+
 terminal OPEN_BRACKET;
 terminal CLOSE_BRACKET;
+terminal OPEN_SQUARE_BRACKET;
+terminal CLOSE_SQUARE_BRACKET;
+terminal OPEN_CURLY_BRACKET;
+terminal CLOSE_CURLY_BRACKET;
+
+/* ------------------------ PALABRAS RESERVADAS ------------- */
+
+terminal IF;
+terminal ELSE;
+terminal WHILE;
+terminal FOR;
+
+
+
+/* ------------------------ OTROS TOKENS ------------------- */
+
 terminal INTEGER_CONSTANT;
 terminal IDENTIFIER;
 
