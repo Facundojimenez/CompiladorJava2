@@ -94,13 +94,32 @@ Break = "break"
 Throw = "throw"
 Public = "public"
 Case = "case"
-
+Continue = "continue"
+Protected = "protected"
+Import = "import"
+Case = "case"
+Return = "return"
+Catch = "catch"
+Short = "short"
+Try = "try"
+Char = "char"
+Interface = "interface"
+Static = "static"
+Void = "void"
+Class = "class"
+Finally = "finally"
+Long = "long"
+Const = "const"
+Float = "float"
 
 
 /* ------------------------ OTROS TOKENS ------------------- */
 
 Identifier = {Letter} ({Letter}|{Digit})*
 IntegerConstant = {Digit}+
+RealConstant = {Digit}+ "." {Digit}+
+Character = {Letter}
+
 
 /* ----------------------- Elementos que se detectan pero NO producen TOKENS ------------------- */
 
