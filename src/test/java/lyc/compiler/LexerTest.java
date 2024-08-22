@@ -14,8 +14,11 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static com.google.common.truth.Truth.assertThat;
-import static lyc.compiler.constants.Constants.STRING_MAX_LENGTH;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import static lyc.compiler.constants.Constants.STRING_MAX_LENGTH;
+
+import lyc.compiler.model.InvalidFloatException;
 
 // Quitar la linea de abajo para habilitar los tests antes de compilar (por defecto están deshabilitados hasta que los hagamos funcionar)
 //@Disabled
@@ -47,7 +50,6 @@ public class LexerTest {
     });
   }
 
-  @Disabled
   @Test
   public void invalidPositiveIntegerConstantValue() {
     assertThrows(InvalidIntegerException.class, () -> {
@@ -56,6 +58,7 @@ public class LexerTest {
     });
   }
 
+  //TO DO: VER DE ARREGLAR CUANDO SE PUEDA DETECTAR ENTEROS NEGATIVOS
   @Disabled
   @Test
   public void invalidNegativeIntegerConstantValue() {
@@ -89,6 +92,33 @@ public class LexerTest {
       nextToken();
     });
   }
+
+  /* ---------------------------- TESTS NUESTROS ---------------------------- */
+
+  @Test
+  public void invalidPositiveFloatConstantValue() {
+    assertThrows(InvalidFloatException.class, () -> {
+      scan("%f".formatted(10000000000000000.5).replace(",", ".")); //Se agrega un replace porque en algunas computadoras devuelve flotantes con coma en vez de punto
+      nextToken();
+    });
+  }
+
+  //TO DO: VER DE ARREGLAR CUANDO SE PUEDA DETECTAR FLOTANTES NEGATIVOS
+  @Disabled
+  @Test
+  public void invalidNegativeFloatConstantValue() {
+    assertThrows(InvalidFloatException.class, () -> {
+      scan("%f".formatted(-10000000000000000.5).replace(",", ".")); //Se agrega un replace porque en algunas computadoras devuelve flotantes con coma en vez de punto
+      nextToken();
+    });
+  }
+
+  @Test
+  public void stringConstant() throws Exception{
+    scan("\"mi string 123456789 !#$%&/()@\"");
+    assertThat(nextToken()).isEqualTo(ParserSym.STRING_CONSTANT);
+  }
+
 
   @AfterEach
   public void resetLexer() {

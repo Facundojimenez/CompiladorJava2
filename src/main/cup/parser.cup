@@ -54,6 +54,9 @@ terminal OPEN_BRACKET;
 terminal CLOSE_BRACKET;
 terminal OPEN_CURLY_BRACKET;
 terminal CLOSE_CURLY_BRACKET;
+terminal COMMA;
+terminal DOT;
+terminal COLON;
 
 
 /* -------------------------  IDENTIFICADOR ------------------------- */

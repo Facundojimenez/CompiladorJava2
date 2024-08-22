@@ -7,6 +7,10 @@ import static lyc.compiler.constants.Constants.*;
 
 import static lyc.compiler.constants.Constants.STRING_MAX_LENGTH;
 import static lyc.compiler.constants.Constants.ID_MAX_LENGTH;
+import static lyc.compiler.constants.Constants.INTEGER_MAX_POSITIVE_VALUE;
+import static lyc.compiler.constants.Constants.INTEGER_MIN_NEGATIVE_VALUE;
+import static lyc.compiler.constants.Constants.FLOAT_MAX_POSITIVE_VALUE;
+import static lyc.compiler.constants.Constants.FLOAT_MIN_NEGATIVE_VALUE;
 
 
 %%
@@ -50,8 +54,10 @@ LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 Identation =  [ \t\f]
 
+SpecialCharacters = ["$"|"&"|"+"|","|":"|";"|"!"|"?"|"@"|"#"|"|"|"'"|"<"|">"|"."|"^"|"*"|"("|")"|"%"|"!"|"-"|"\""|"/"]
 Letter = [a-zA-Z]
 Digit = [0-9]
+
 
 /* ------------------------ PALABRAS RESERVADAS BLOQUES -------------------- */
 
@@ -97,19 +103,22 @@ OpenBracket = "("
 CloseBracket = ")"
 OpenCurlyBracket = "{"
 CloseCurlyBracket = "}"
-
+Comma=","
+Dot="."
+Colon=":"
+//Creo que no haria falta definir el punto y coma por lo que muestra la consigna
 
 /* -------------------------  IDENTIFICADOR ------------------------- */
 
 Identifier = {Letter} ({Letter}|{Digit})*
 
-  /* ------------------------- CONSTANTES ------------------------- */
+/* ------------------------- CONSTANTES ------------------------- */
 
 IntegerConstant = {Digit}+
 RealConstant = {Digit}+ "." {Digit}+
-StringConstant = "\""({Letter}|{Digit})*"\""
+StringConstant = "\""({Letter}|{Digit}|{SpecialCharacters}|{Identation})*"\""
 
-Character = {Letter} //???????????
+Character = {Letter} // no se para que está, vino con el template ???????????
 
 
 /* ----------------------- Elementos que se detectan pero NO producen TOKENS ------------------- */
@@ -178,6 +187,9 @@ Comment = "*-"({Letter}|{Digit}|{WhiteSpace})*"-*"
   {CloseBracket}                          { return symbol(ParserSym.CLOSE_BRACKET); }
   {OpenCurlyBracket}                      { return symbol(ParserSym.OPEN_CURLY_BRACKET); }
   {CloseCurlyBracket}                     { return symbol(ParserSym.CLOSE_CURLY_BRACKET); }
+  {Comma}                     						{ return symbol(ParserSym.COMMA); }
+  {Dot}                     							{ return symbol(ParserSym.DOT); }
+  {Colon}                   							{ return symbol(ParserSym.COLON); }
 
 	/* -------------------------  IDENTIFICADOR ------------------------- */
   {Identifier}                            { 
@@ -190,8 +202,31 @@ Comment = "*-"({Letter}|{Digit}|{WhiteSpace})*"-*"
 																					}
 
   /* ------------------------- CONSTANTES ------------------------- */
-  {IntegerConstant}                       { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
-  {RealConstant}                        	{ return symbol(ParserSym.FLOAT_CONSTANT, yytext()); }
+  {IntegerConstant}                       { 
+																						long valorEntero = Long.parseLong(yytext());  
+																						if(valorEntero < INTEGER_MIN_NEGATIVE_VALUE){
+																							throw new InvalidIntegerException("El valor mínimo de una constante Int es " + INTEGER_MIN_NEGATIVE_VALUE + ". Valor de la constante: " +  valorEntero);
+																						}
+
+																						if(valorEntero > INTEGER_MAX_POSITIVE_VALUE){
+																							throw new InvalidIntegerException("El valor máximo de una constante Int es " + INTEGER_MAX_POSITIVE_VALUE + ". Valor de la constante: " +  valorEntero);
+																						}
+																						return symbol(ParserSym.INTEGER_CONSTANT, yytext()); 
+																					}
+
+  {RealConstant}                        	{ 
+																						double valorFlotante = Double.parseDouble(yytext());
+
+																						if(valorFlotante < FLOAT_MIN_NEGATIVE_VALUE){
+																							throw new InvalidFloatException("El valor mínimo de una constante Float es " + INTEGER_MIN_NEGATIVE_VALUE + ". Valor de la constante: " +  valorFlotante);
+																						}
+
+																						if(valorFlotante > FLOAT_MAX_POSITIVE_VALUE){
+																							throw new InvalidFloatException("El valor máximo de una constante Float es " + INTEGER_MAX_POSITIVE_VALUE + ". Valor de la constante: " +  valorFlotante);
+																						}
+
+																						return symbol(ParserSym.FLOAT_CONSTANT, yytext()); 
+																						}
   {StringConstant}                       	{ 
 
 																						int largoCadena = yytext().length();
