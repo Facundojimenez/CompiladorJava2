@@ -1,9 +1,21 @@
 package lyc.compiler;
 
 import java_cup.runtime.*;
+import lyc.compiler.symboltable.SymbolTable;
 
 class Parser;
 
+action code {:
+public void insertar(String nombre, String tipo,String valor){
+    SymbolTable tabla = SymbolTable.getSymbolTable();
+    int longitud = 0;
+    if (valor != null){
+        longitud = valor.length();
+    }
+    tabla.add(nombre,tipo,valor,longitud);
+   }
+
+:};
 
 // Terminals
 
@@ -81,13 +93,13 @@ non terminal factor;
 start with sentence;
 
 sentence ::= assignment {: System.out.println("End"); :};
-assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
+assignment ::= IDENTIFIER:id ASSIG expression {: insertar(id.toString(),null,id.toString()); :};
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
 expression ::= term {: System.out.println("Expression = Term"); :};
 term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
-factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
+factor ::= IDENTIFIER:id  {: insertar(id.toString(),null,id.toString()); :};
+factor ::= INTEGER_CONSTANT:constant {: insertar(constant.toString(),null,null); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};

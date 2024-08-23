@@ -5,6 +5,7 @@ import lyc.compiler.factories.FileFactory;
 import lyc.compiler.factories.ParserFactory;
 import lyc.compiler.files.FileOutputWriter;
 import lyc.compiler.files.SymbolTableGenerator;
+import lyc.compiler.symboltable.SymbolTable;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -33,6 +34,8 @@ public final class Compiler {
             System.exit(0);
         }
 
+        SymbolTable tabla = SymbolTable.getSymbolTable();
+        System.out.println(tabla);
         System.out.println("Compilation Successful");
 
     }
