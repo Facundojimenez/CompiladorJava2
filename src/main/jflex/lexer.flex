@@ -118,8 +118,6 @@ IntegerConstant = {Digit}+
 RealConstant = {Digit}+ "." {Digit}+
 StringConstant = "\""({Letter}|{Digit}|{SpecialCharacters}|{Identation})*"\""
 
-Character = {Letter} // no se para que está, vino con el template ???????????
-
 
 /* ----------------------- Elementos que se detectan pero NO producen TOKENS ------------------- */
 
