@@ -77,6 +77,12 @@ String = "String"
 Leer = "leer"
 Escribir = "escribir"
 
+/* ----------- PALABRAS RESERVADAS TEMAS ESPECIALES ---------------- */
+
+Triangulo = "triangulo"
+BinaryCount = "binaryCount"
+
+
 /* ----------------------- OPERADORES ARITMETICOS -----------------------*/
 
 Plus = "+"
@@ -141,106 +147,110 @@ Comment = "*-"({Letter}|{Digit}|{WhiteSpace})*"-*"
 
 <YYINITIAL> {
 
-	/* ------------------------ PALABRAS RESERVADAS (van SIEMPRE arriba de ID o CTE porque tienen mayor prioridad de ser detectadas primero) ------------- */
+  /* ------------------------ PALABRAS RESERVADAS (van SIEMPRE arriba de ID o CTE porque tienen mayor prioridad de ser detectadas primero) ------------- */
 
-	{Si}                                    { return symbol(ParserSym.SI); }
-	{Sino}                                  { return symbol(ParserSym.SINO); }
-	{Mientras}                              { return symbol(ParserSym.MIENTRAS); }
-	{Init}                                  { return symbol(ParserSym.INIT); }
+  {Si}                                    { return symbol(ParserSym.SI); }
+  {Sino}                                  { return symbol(ParserSym.SINO); }
+  {Mientras}                              { return symbol(ParserSym.MIENTRAS); }
+  {Init}                                  { return symbol(ParserSym.INIT); }
 
-	/* ------------------------ PALABRAS RESERVADAS TIPOS DE DATOS ------------------- */
+  /* ------------------------ PALABRAS RESERVADAS TIPOS DE DATOS ------------------- */
 
-	{Int}                                   { return symbol(ParserSym.INT); }
-	{Float}                                 { return symbol(ParserSym.FLOAT); }
-	{String}                                { return symbol(ParserSym.STRING); }
+  {Int}                                   { return symbol(ParserSym.INT); }
+  {Float}                                 { return symbol(ParserSym.FLOAT); }
+  {String}                                { return symbol(ParserSym.STRING); }
 
 
-	/* ----------------------- PALABRAS RESERVADAS ENTRADA / SALIDA ------------------------ */
+  /* ----------------------- PALABRAS RESERVADAS ENTRADA / SALIDA ------------------------ */
 
-	{Leer}                                  { return symbol(ParserSym.LEER); }
-	{Escribir}                              { return symbol(ParserSym.ESCRIBIR); }
+  {Leer}                                  { return symbol(ParserSym.LEER); }
+  {Escribir}                              { return symbol(ParserSym.ESCRIBIR); }
 
+  /* --------------------- PALABRAS RESERVADAS TEMAS ESPECIALES ---------------- */
+
+  {Triangulo} 							{ return symbol(ParserSym.TRIANGULO); }
+  {BinaryCount}							{ return symbol(ParserSym.BINARY_COUNT); }
 
   /* -----------------------  OPERADORES ARITMETICOS -----------------------*/
-  {Plus}                                  { return symbol(ParserSym.PLUS); }
-  {Sub}                                   { return symbol(ParserSym.SUB); }
-  {Mult}                                  { return symbol(ParserSym.MULT); }
-  {Div}                                   { return symbol(ParserSym.DIV); }
-  {Assig}                                 { return symbol(ParserSym.ASSIG); }
+  {Plus}                                { return symbol(ParserSym.PLUS); }
+  {Sub}                                 { return symbol(ParserSym.SUB); }
+  {Mult}                                { return symbol(ParserSym.MULT); }
+  {Div}                                 { return symbol(ParserSym.DIV); }
+  {Assig}                               { return symbol(ParserSym.ASSIG); }
 
   /* ------------------------ OPERADORES LOGICOS -------------------------- */
-  {Equal}                                 { return symbol(ParserSym.EQUAL); }
-  {NotEqual}                              { return symbol(ParserSym.NOT_EQUAL); }
-  {GreaterThan}                           { return symbol(ParserSym.GREATER_THAN); }
-  {GreaterEqualThan}                      { return symbol(ParserSym.GREATER_THAN_EQUAL); }
-  {LessThan}                              { return symbol(ParserSym.LESS_THAN); }
-  {LessEqual}                             { return symbol(ParserSym.LESS_THAN_EQUAL); }
-  {And}                                 	{ return symbol(ParserSym.AND); }
-  {Or}                                		{ return symbol(ParserSym.OR); }
-  {Not}                                		{ return symbol(ParserSym.NOT); }
+  {Equal}                               { return symbol(ParserSym.EQUAL); }
+  {NotEqual}                            { return symbol(ParserSym.NOT_EQUAL); }
+  {GreaterThan}                         { return symbol(ParserSym.GREATER_THAN); }
+  {GreaterEqualThan}                    { return symbol(ParserSym.GREATER_THAN_EQUAL); }
+  {LessThan}                            { return symbol(ParserSym.LESS_THAN); }
+  {LessEqual}                           { return symbol(ParserSym.LESS_THAN_EQUAL); }
+  {And}                                	{ return symbol(ParserSym.AND); }
+  {Or}                                	{ return symbol(ParserSym.OR); }
+  {Not}                                	{ return symbol(ParserSym.NOT); }
 
 
   /* ------------------------ TOKEN DE BLOQUES Y AGRUPAMIENTO ------------- */
-  {OpenBracket}                           { return symbol(ParserSym.OPEN_BRACKET); }
-  {CloseBracket}                          { return symbol(ParserSym.CLOSE_BRACKET); }
-  {OpenCurlyBracket}                      { return symbol(ParserSym.OPEN_CURLY_BRACKET); }
-  {CloseCurlyBracket}                     { return symbol(ParserSym.CLOSE_CURLY_BRACKET); }
-  {Comma}                     						{ return symbol(ParserSym.COMMA); }
-  {Dot}                     							{ return symbol(ParserSym.DOT); }
-  {Colon}                   							{ return symbol(ParserSym.COLON); }
+  {OpenBracket}                         { return symbol(ParserSym.OPEN_BRACKET); }
+  {CloseBracket}                        { return symbol(ParserSym.CLOSE_BRACKET); }
+  {OpenCurlyBracket}                    { return symbol(ParserSym.OPEN_CURLY_BRACKET); }
+  {CloseCurlyBracket}                   { return symbol(ParserSym.CLOSE_CURLY_BRACKET); }
+  {Comma}                     			{ return symbol(ParserSym.COMMA); }
+  {Dot}                     			{ return symbol(ParserSym.DOT); }
+  {Colon}                   			{ return symbol(ParserSym.COLON); }
 
 	/* -------------------------  IDENTIFICADOR ------------------------- */
-  {Identifier}                            {
-																						int largoCadena = yytext().length();
-																						if(largoCadena > ID_MAX_LENGTH){
-																							throw new InvalidLengthException("El largo máximo de una Identificador es 30. Largo del identificador: " + largoCadena);
-																						}
+  {Identifier}                           {
+											int largoCadena = yytext().length();
+											if(largoCadena > ID_MAX_LENGTH){
+												throw new InvalidLengthException("El largo máximo de una Identificador es 30. Largo del identificador: " + largoCadena);
+											}
 
-																						return symbol(ParserSym.IDENTIFIER, yytext());
-																					}
+											return symbol(ParserSym.IDENTIFIER, yytext());
+										}
 
   /* ------------------------- CONSTANTES ------------------------- */
-  {IntegerConstant}                       {
-																						long valorEntero = Long.parseLong(yytext());
-																						if(valorEntero < INTEGER_MIN_NEGATIVE_VALUE){
-																							throw new InvalidIntegerException("El valor mínimo de una constante Int es " + INTEGER_MIN_NEGATIVE_VALUE + ". Valor de la constante: " +  valorEntero);
-																						}
+  {IntegerConstant}                      {
+											long valorEntero = Long.parseLong(yytext());
+											if(valorEntero < INTEGER_MIN_NEGATIVE_VALUE){
+												throw new InvalidIntegerException("El valor mínimo de una constante Int es " + INTEGER_MIN_NEGATIVE_VALUE + ". Valor de la constante: " +  valorEntero);
+											}
 
-																						if(valorEntero > INTEGER_MAX_POSITIVE_VALUE){
-																							throw new InvalidIntegerException("El valor máximo de una constante Int es " + INTEGER_MAX_POSITIVE_VALUE + ". Valor de la constante: " +  valorEntero);
-																						}
-																						return symbol(ParserSym.INTEGER_CONSTANT, yytext()); 
-																					}
+											if(valorEntero > INTEGER_MAX_POSITIVE_VALUE){
+												throw new InvalidIntegerException("El valor máximo de una constante Int es " + INTEGER_MAX_POSITIVE_VALUE + ". Valor de la constante: " +  valorEntero);
+											}
+											return symbol(ParserSym.INTEGER_CONSTANT, yytext());
+										}
 
-  {RealConstant}                        	{ 
-																						double valorFlotante = Double.parseDouble(yytext());
+  {RealConstant}                        {
+										  double valorFlotante = Double.parseDouble(yytext());
 
-																						if(valorFlotante < FLOAT_MIN_NEGATIVE_VALUE){
-																							throw new InvalidFloatException("El valor mínimo de una constante Float es " + INTEGER_MIN_NEGATIVE_VALUE + ". Valor de la constante: " +  valorFlotante);
-																						}
+										  if(valorFlotante < FLOAT_MIN_NEGATIVE_VALUE){
+											  throw new InvalidFloatException("El valor mínimo de una constante Float es " + INTEGER_MIN_NEGATIVE_VALUE + ". Valor de la constante: " +  valorFlotante);
+										  }
 
-																						if(valorFlotante > FLOAT_MAX_POSITIVE_VALUE){
-																							throw new InvalidFloatException("El valor máximo de una constante Float es " + INTEGER_MAX_POSITIVE_VALUE + ". Valor de la constante: " +  valorFlotante);
-																						}
+										  if(valorFlotante > FLOAT_MAX_POSITIVE_VALUE){
+											  throw new InvalidFloatException("El valor máximo de una constante Float es " + INTEGER_MAX_POSITIVE_VALUE + ". Valor de la constante: " +  valorFlotante);
+										  }
 
-																						return symbol(ParserSym.FLOAT_CONSTANT, yytext()); 
-																						}
-  {StringConstant}                       	{ 
+										  return symbol(ParserSym.FLOAT_CONSTANT, yytext());
+										 }
+  {StringConstant}                       {
 
-																						int largoCadena = yytext().length();
-																						if(largoCadena > STRING_MAX_LENGTH){
-																							throw new InvalidLengthException("El largo máximo de una constante String es 40. Largo de la cadena: " + largoCadena);
-																						}
+											  int largoCadena = yytext().length();
+											  if(largoCadena > STRING_MAX_LENGTH){
+												  throw new InvalidLengthException("El largo máximo de una constante String es 40. Largo de la cadena: " + largoCadena);
+											  }
 
-																						return symbol(ParserSym.STRING_CONSTANT, yytext());
-																					}
+											  return symbol(ParserSym.STRING_CONSTANT, yytext());
+										  }
 
 
   /* ----------------------- Elementos que se detectan pero NO producen TOKENS ------------------- */
-  {WhiteSpace}                   { /* ignore */ }
-  {Comment}                   { /* ignore */ }
+  {WhiteSpace}                   		{ /* ignore */ }
+  {Comment}                   			{ /* ignore */ }
 }
 
 
 /* error fallback */
-[^]                              { throw new UnknownCharacterException(yytext()); }
+[^]                              		{ throw new UnknownCharacterException(yytext()); }

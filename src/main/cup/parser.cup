@@ -38,6 +38,11 @@ terminal STRING;
 terminal LEER;
 terminal ESCRIBIR;
 
+/* ----------- PALABRAS RESERVADAS TEMAS ESPECIALES ---------------- */
+
+terminal TRIANGULO;
+terminal BINARY_COUNT;
+
 
 /* ----------------------- OPERADORES ARITMETICOS -----------------------*/
 
