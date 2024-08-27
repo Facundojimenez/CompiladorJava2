@@ -6,13 +6,14 @@ import lyc.compiler.symboltable.SymbolTable;
 class Parser;
 
 action code {:
-public void insertar(String nombre, String tipo,String valor){
+public void insertar(String nombre, String tipo, String valor, boolean esConstante){
     SymbolTable tabla = SymbolTable.getSymbolTable();
+
     int longitud = 0;
     if (valor != null){
         longitud = valor.length();
     }
-    tabla.add(nombre,tipo,valor,longitud);
+    tabla.add(nombre,tipo,valor,longitud, esConstante);
    }
 
 :};
@@ -89,17 +90,89 @@ non terminal expression;
 non terminal term;
 non terminal factor;
 
-// Start Symbol Definition
-start with sentence;
+// --------------- Aca ponemos nuestros NO terminales ------------------
+non terminal program;
+non terminal block;
+non terminal inicializacion;
+non terminal bloque_inicializacion;
+non terminal sentencia_inicializacion;
+non terminal lista_identificadores;
+non terminal tipo_dato;
 
-sentence ::= assignment {: System.out.println("End"); :};
-assignment ::= IDENTIFIER:id ASSIG expression {: insertar(id.toString(),null,id.toString()); :};
-expression ::= expression PLUS term {: System.out.println("+"); :};
-expression ::= expression SUB term {: System.out.println("-"); :};
-expression ::= term {: System.out.println("Expression = Term"); :};
-term ::= term MULT factor {: System.out.println("*"); :};
-term ::= term DIV factor {: System.out.println("/"); :};
-term ::= factor {: System.out.println("Term = factor"); :};
-factor ::= IDENTIFIER:id  {: insertar(id.toString(),null,id.toString()); :};
-factor ::= INTEGER_CONSTANT:constant {: insertar(constant.toString(),null,null); :};
-factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
+// Start Symbol Definition
+start with program;
+
+program ::= block;
+block ::= block sentence;
+block ::= sentence;
+
+//Sentencia de asignacion
+sentence ::= assignment {:
+	System.out.println("Parser: sentence -> assignment");
+:};
+assignment ::= IDENTIFIER:id ASSIG expression {:
+	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG expression");
+	insertar(id.toString(),null, null, false);
+:};
+expression ::= expression PLUS term {:
+	System.out.println("Parser: expression -> expression PLUS term");
+:};
+expression ::= expression SUB term {:
+	System.out.println("Parser: expression -> expression SUB term");
+:};
+expression ::= term {:
+	System.out.println("Parser: expression -> term");
+:};
+term ::= term MULT factor {:
+	System.out.println("Parser: term -> term MULT factor");
+:};
+term ::= term DIV factor {:
+	System.out.println("Parser: term -> term DIV factor");
+:};
+term ::= factor {:
+	System.out.println("Parser: term -> factor");
+:};
+factor ::= IDENTIFIER:id  {:
+	System.out.println("Parser: factor -> IDENTIFIER (" + id + ")");
+	insertar(id.toString(), null, null, false);
+:};
+factor ::= INTEGER_CONSTANT:constant {:
+	System.out.println("Parser: factor -> INTEGER_CONSTANT (" + constant + ")");
+	insertar(constant.toString(), null, constant.toString(), true);
+:};
+factor ::= OPEN_BRACKET expression CLOSE_BRACKET {:
+	System.out.println("Parser: factor -> OPEN_BRACKET expression CLOSE_BRACKET");
+:};
+
+
+//Sentencia de inicializacion
+sentence ::= inicializacion {:
+	System.out.println("Parser: sentence -> inicializacion");
+:};
+inicializacion ::= INIT OPEN_CURLY_BRACKET bloque_inicializacion CLOSE_CURLY_BRACKET {:
+	System.out.println("Parser: inicializacion -> INIT OPEN_CURLY_BRACKET bloque_inicializacion CLOSE_CURLY_BRACKET");
+:};
+bloque_inicializacion ::= bloque_inicializacion sentencia_inicializacion {:
+	System.out.println("Parser: bloque_inicializacion -> bloque_inicializacion sentencia_inicializacion");
+:};
+bloque_inicializacion ::= sentencia_inicializacion {:
+	System.out.println("Parser: bloque_inicializacion -> sentencia_inicializacion");
+:};
+sentencia_inicializacion ::= lista_identificadores  COLON tipo_dato {:
+	System.out.println("Parser: sentencia_inicializacion -> lista_identificadores  COLON tipo_dato");
+:};
+lista_identificadores ::= lista_identificadores COMMA IDENTIFIER {:
+	System.out.println("Parser: lista_identificadores -> lista_identificadores COMMA IDENTIFIER");
+:};
+lista_identificadores ::=  IDENTIFIER:id {:
+	System.out.println("Parser: lista_identificadores -> IDENTIFIER (" + id + ")");
+:};
+tipo_dato ::= INT {:
+	System.out.println("Parser: tipo_dato -> Int");
+:};
+tipo_dato ::= FLOAT {:
+	System.out.println("Parser: tipo_dato -> Float");
+:};
+tipo_dato ::= STRING {:
+	System.out.println("Parser: tipo_dato -> String");
+:};

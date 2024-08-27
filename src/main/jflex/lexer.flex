@@ -68,9 +68,9 @@ Init = "init"
 
 /* ------------ PALABRAS RESERVADAS TIPOS DE DATOS ------------------- */
 
-Int = "int"
-Float = "float"
-String = "string"
+Int = "Int"
+Float = "Float"
+String = "String"
 
 /* ----------- PALABRAS RESERVADAS ENTRADA / SALIDA ---------------- */
 
@@ -192,7 +192,7 @@ Comment = "*-"({Letter}|{Digit}|{WhiteSpace})*"-*"
   {Colon}                   							{ return symbol(ParserSym.COLON); }
 
 	/* -------------------------  IDENTIFICADOR ------------------------- */
-  {Identifier}                            { 
+  {Identifier}                            {
 																						int largoCadena = yytext().length();
 																						if(largoCadena > ID_MAX_LENGTH){
 																							throw new InvalidLengthException("El largo máximo de una Identificador es 30. Largo del identificador: " + largoCadena);
@@ -202,8 +202,8 @@ Comment = "*-"({Letter}|{Digit}|{WhiteSpace})*"-*"
 																					}
 
   /* ------------------------- CONSTANTES ------------------------- */
-  {IntegerConstant}                       { 
-																						long valorEntero = Long.parseLong(yytext());  
+  {IntegerConstant}                       {
+																						long valorEntero = Long.parseLong(yytext());
 																						if(valorEntero < INTEGER_MIN_NEGATIVE_VALUE){
 																							throw new InvalidIntegerException("El valor mínimo de una constante Int es " + INTEGER_MIN_NEGATIVE_VALUE + ". Valor de la constante: " +  valorEntero);
 																						}

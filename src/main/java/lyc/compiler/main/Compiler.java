@@ -34,8 +34,13 @@ public final class Compiler {
             System.exit(0);
         }
 
+        System.out.println("---- MOSTRANDO TABLA DE SIMBOLOS ----");
+
         SymbolTable tabla = SymbolTable.getSymbolTable();
         System.out.println(tabla);
+
+        System.out.println("---- FIN TABLA DE SIMBOLOS ----");
+
         System.out.println("Compilation Successful");
 
     }

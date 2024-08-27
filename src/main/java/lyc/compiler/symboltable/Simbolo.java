@@ -30,6 +30,6 @@ public class Simbolo {
     }
     @Override
     public String toString(){
-        return "Tipo: "+ tipo +" Valor: "+ valor +" Longitud: "+ longitud;
+        return "Tipo: "+ tipo + "\t\t" + " Valor: " + valor  + "\t\t" + " Longitud: "+ longitud;
     }
 }

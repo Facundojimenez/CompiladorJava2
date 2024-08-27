@@ -119,6 +119,48 @@ public class LexerTest {
     assertThat(nextToken()).isEqualTo(ParserSym.STRING_CONSTANT);
   }
 
+  @Test
+  public void initBlock() throws Exception{
+    scan("init {\n" +
+            "    a1, b1 : Float\n" +
+            "    variable1 : Int\n" +
+            "    p1, p2, p3 : String\n" +
+            "    c, d, e : Int\n" +
+            "}");
+    assertThat(nextToken()).isEqualTo(ParserSym.INIT);
+    assertThat(nextToken()).isEqualTo(ParserSym.OPEN_CURLY_BRACKET);
+
+    assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
+    assertThat(nextToken()).isEqualTo(ParserSym.COMMA);
+    assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
+    assertThat(nextToken()).isEqualTo(ParserSym.COLON);
+    assertThat(nextToken()).isEqualTo(ParserSym.FLOAT);
+
+    assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
+    assertThat(nextToken()).isEqualTo(ParserSym.COLON);
+    assertThat(nextToken()).isEqualTo(ParserSym.INT);
+
+    assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
+    assertThat(nextToken()).isEqualTo(ParserSym.COMMA);
+    assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
+    assertThat(nextToken()).isEqualTo(ParserSym.COMMA);
+    assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
+    assertThat(nextToken()).isEqualTo(ParserSym.COLON);
+    assertThat(nextToken()).isEqualTo(ParserSym.STRING);
+
+    assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
+    assertThat(nextToken()).isEqualTo(ParserSym.COMMA);
+    assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
+    assertThat(nextToken()).isEqualTo(ParserSym.COMMA);
+    assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
+
+    assertThat(nextToken()).isEqualTo(ParserSym.COLON);
+    assertThat(nextToken()).isEqualTo(ParserSym.INT);
+
+
+    assertThat(nextToken()).isEqualTo(ParserSym.CLOSE_CURLY_BRACKET);
+  }
+
 
   @AfterEach
   public void resetLexer() {
