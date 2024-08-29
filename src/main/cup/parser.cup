@@ -3,9 +3,12 @@ package lyc.compiler;
 import java_cup.runtime.*;
 import lyc.compiler.symboltable.SymbolTable;
 
+import java.util.ArrayList;
 class Parser;
 
 action code {:
+
+public ArrayList<String> variables = new ArrayList<String>();
 public void insertar(String nombre, String tipo, String valor, boolean esConstante){
     SymbolTable tabla = SymbolTable.getSymbolTable();
 
@@ -117,7 +120,6 @@ sentence ::= assignment {:
 :};
 assignment ::= IDENTIFIER:id ASSIG expression {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG expression");
-	insertar(id.toString(),null, null, false);
 :};
 expression ::= expression PLUS term {:
 	System.out.println("Parser: expression -> expression PLUS term");
@@ -139,7 +141,6 @@ term ::= factor {:
 :};
 factor ::= IDENTIFIER:id  {:
 	System.out.println("Parser: factor -> IDENTIFIER (" + id + ")");
-	insertar(id.toString(), null, null, false);
 :};
 factor ::= INTEGER_CONSTANT:constant {:
 	System.out.println("Parser: factor -> INTEGER_CONSTANT (" + constant + ")");
@@ -166,18 +167,32 @@ bloque_inicializacion ::= sentencia_inicializacion {:
 sentencia_inicializacion ::= lista_identificadores  COLON tipo_dato {:
 	System.out.println("Parser: sentencia_inicializacion -> lista_identificadores  COLON tipo_dato");
 :};
-lista_identificadores ::= lista_identificadores COMMA IDENTIFIER {:
-	System.out.println("Parser: lista_identificadores -> lista_identificadores COMMA IDENTIFIER");
+lista_identificadores ::= lista_identificadores COMMA IDENTIFIER:id {:
+	System.out.println("Parser: lista_identificadores -> lista_identificadores COMMA IDENTIFIER (" + id + ")");
+	variables.add(id.toString());
 :};
 lista_identificadores ::=  IDENTIFIER:id {:
 	System.out.println("Parser: lista_identificadores -> IDENTIFIER (" + id + ")");
+	variables.add(id.toString());
 :};
 tipo_dato ::= INT {:
 	System.out.println("Parser: tipo_dato -> Int");
+	for (String id : variables) {
+            insertar(id.toString(), "INT", null, false);
+        }
+	variables.clear();
 :};
 tipo_dato ::= FLOAT {:
 	System.out.println("Parser: tipo_dato -> Float");
+	for (String id : variables) {
+            insertar(id.toString(), "FLOAT", null, false);
+        }
+	variables.clear();
 :};
 tipo_dato ::= STRING {:
 	System.out.println("Parser: tipo_dato -> String");
+	for (String id : variables) {
+            insertar(id.toString(), "STRING", null, false);
+        }
+	variables.clear();
 :};

@@ -18,9 +18,9 @@ public class SymbolTable {
     }
 
     public void add(String nombre,String tipo,String valor,int longitud, boolean esConstante){
-        nombre = nombre.replace(" ","_");//para evitar problemas al pasar el codigo a ASM
+        nombre = "_"+nombre.replace(" ","_");//para evitar problemas al pasar el codigo a ASM
 
-        //En caso de que un token sea CTE de algun tipo, se le agrega el prefijo "_"
+        //En caso de que un token sea CTE de algun tipo, se le agrega un "_" extra
         if(esConstante){
             nombre = "_"+nombre;
         }
@@ -28,6 +28,7 @@ public class SymbolTable {
         //agregar si no existe
         if (!this.tabla.containsKey(nombre)){
             this.tabla.put(nombre,new Simbolo(tipo,valor,longitud));
+            return;
         } 
         //manejar duplicados aqui
         //
