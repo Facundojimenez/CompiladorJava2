@@ -128,7 +128,7 @@ StringConstant = "\""({Letter}|{Digit}|{SpecialCharacters}|{Identation})*"\""
 /* ----------------------- Elementos que se detectan pero NO producen TOKENS ------------------- */
 
 WhiteSpace = {LineTerminator} | {Identation}
-Comment = "*-"({Letter}|{Digit}|{WhiteSpace})*"-*"
+Comment = "*-"({Letter}|{Digit}|{WhiteSpace}|{SpecialCharacters})*"-*"
 
 %%
 
@@ -226,11 +226,11 @@ Comment = "*-"({Letter}|{Digit}|{WhiteSpace})*"-*"
 										  double valorFlotante = Double.parseDouble(yytext());
 
 										  if(valorFlotante < FLOAT_MIN_NEGATIVE_VALUE){
-											  throw new InvalidFloatException("El valor mínimo de una constante Float es " + INTEGER_MIN_NEGATIVE_VALUE + ". Valor de la constante: " +  valorFlotante);
+											  throw new InvalidFloatException("El valor mínimo de una constante Float es " + FLOAT_MIN_NEGATIVE_VALUE + ". Valor de la constante: " +  valorFlotante);
 										  }
 
 										  if(valorFlotante > FLOAT_MAX_POSITIVE_VALUE){
-											  throw new InvalidFloatException("El valor máximo de una constante Float es " + INTEGER_MAX_POSITIVE_VALUE + ". Valor de la constante: " +  valorFlotante);
+											  throw new InvalidFloatException("El valor máximo de una constante Float es " + FLOAT_MAX_POSITIVE_VALUE + ". Valor de la constante: " +  valorFlotante);
 										  }
 
 										  return symbol(ParserSym.FLOAT_CONSTANT, yytext());
