@@ -15,29 +15,38 @@ import static com.google.common.truth.Truth.assertThat;
 import static lyc.compiler.Constants.EXAMPLES_ROOT_DIRECTORY;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Disabled
+
 public class ParserTest {
 
     @Test
     public void assignmentWithExpression() throws Exception {
-        compilationSuccessful("c=d*(e-21)/4");
+        System.out.println("---------Corriendo test de ASIGNACION con EXPRESION---------------");
+        compilationSuccessful("c := d * (e - 21) / 4");
+        System.out.println("---------FIN test de ASIGNACION con EXPRESION---------------\n");
+
     }
 
     @Test
     public void syntaxError() {
+        System.out.println("---------Corriendo test de \"Error de compilacion\"---------------");
         compilationError("1234");
+        System.out.println("---------FIN test de \"Error de compilacion\"---------------\n");
     }
 
     @Test
     void assignments() throws Exception {
+        System.out.println("---------Corriendo test de ASIGNACIONES---------------");
         compilationSuccessful(readFromFile("assignments.txt"));
+        System.out.println("---------FIN test de ASIGNACIONES---------------\n");
     }
 
+    @Disabled
     @Test
     void write() throws Exception {
         compilationSuccessful(readFromFile("write.txt"));
     }
 
+    @Disabled
     @Test
     void read() throws Exception {
         compilationSuccessful(readFromFile("read.txt"));
@@ -45,37 +54,58 @@ public class ParserTest {
 
     @Test
     void comment() throws Exception {
+        System.out.println("---------Corriendo test de COMMENT---------------");
         compilationSuccessful(readFromFile("comment.txt"));
+        System.out.println("---------FIN test de COMMENT---------------\n");
     }
 
     @Test
     void init() throws Exception {
+        System.out.println("---------Corriendo test de INIT---------------");
         compilationSuccessful(readFromFile("init.txt"));
+        System.out.println("---------FIN test de INIT---------------\n");
+
     }
 
     @Test
     void and() throws Exception {
+        System.out.println("---------Corriendo test de AND---------------");
         compilationSuccessful(readFromFile("and.txt"));
+        System.out.println("---------FIN test de AND---------------\n");
+
     }
 
     @Test
     void or() throws Exception {
+        System.out.println("---------Corriendo test de OR---------------");
         compilationSuccessful(readFromFile("or.txt"));
+        System.out.println("---------FIN test de OR---------------\n");
+
     }
 
     @Test
     void not() throws Exception {
+        System.out.println("---------Corriendo test de NOT---------------");
         compilationSuccessful(readFromFile("not.txt"));
+        System.out.println("---------FIN test de NOT---------------\n");
+
     }
+
 
     @Test
     void ifStatement() throws Exception {
+        System.out.println("---------Corriendo test de IF---------------");
         compilationSuccessful(readFromFile("if.txt"));
+        System.out.println("---------FIN test de IF---------------\n");
+
     }
 
     @Test
     void whileStatement() throws Exception {
+        System.out.println("---------Corriendo test de WHILE---------------");
         compilationSuccessful(readFromFile("while.txt"));
+        System.out.println("---------FIN test de WHILE---------------\n");
+
     }
 
 
@@ -92,9 +122,12 @@ public class ParserTest {
     }
 
     private String readFromFile(String fileName) throws IOException {
-        URL url = new URL(EXAMPLES_ROOT_DIRECTORY + "/%s".formatted(fileName));
-        assertThat(url).isNotNull();
-        return IOUtils.toString(url.openStream(), StandardCharsets.UTF_8);
+        InputStream resource = getClass().getResourceAsStream("/%s".formatted(fileName));
+        if(resource == null){
+            System.out.println("No se encontró el archivo: " + fileName);
+        }
+        assertThat(resource).isNotNull();
+        return IOUtils.toString(resource, StandardCharsets.UTF_8);
     }
 
 

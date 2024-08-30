@@ -1,5 +1,11 @@
 init {
-    a1 : Int
+    a1, b2 : Int
+    c3 : Float
+    d4, d5, d6 : String
+}
+
+si ( a > b) {
+	c := d
 }
 
 c:=d*(e-21)/4

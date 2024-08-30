@@ -1,10 +1,4 @@
-si ( a > b) {
-	c := d
-}
-
-si ( a1 > b1) {
+si ( a1 > b1 AND c1 > d1) {
 	c1 := d1
 }
-sino {
-	c1 := e1
-}
+

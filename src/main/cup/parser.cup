@@ -101,13 +101,21 @@ non terminal factor;
 // --------------- Aca ponemos nuestros NO terminales ------------------
 non terminal program;
 non terminal block;
-non terminal inicializacion;
 non terminal bloque_inicializacion;
-non terminal sentencia_inicializacion;
+non terminal inicializacion;
 non terminal lista_identificadores;
 non terminal tipo_dato;
+
+// -- sentencias del lenguaje
+non terminal sentencia_inicializacion;
+non terminal sentencia_si;
+non terminal sentencia_si_sino;
+non terminal sentencia_mientras;
+
+// --- condicionales y comparadores
+non terminal condition_group;
 non terminal condition;
-non terminal sentenciaSi;
+non terminal op_logico;
 
 
 // Start Symbol Definition
@@ -156,7 +164,7 @@ factor ::= OPEN_BRACKET expression CLOSE_BRACKET {:
 
 //Sentencia de inicializacion
 sentence ::= inicializacion {:
-	System.out.println("Parser: sentence -> inicializacion");
+	System.out.println("Parser: sentence -> inicializacion\n\n");
 :};
 inicializacion ::= INIT OPEN_CURLY_BRACKET bloque_inicializacion CLOSE_CURLY_BRACKET {:
 	System.out.println("Parser: inicializacion -> INIT OPEN_CURLY_BRACKET bloque_inicializacion CLOSE_CURLY_BRACKET");
@@ -200,17 +208,80 @@ tipo_dato ::= STRING {:
 	variables.clear();
 :};
 
+// sentencia while
+sentence ::= sentencia_mientras {:
+	System.out.println("Parser: sentence ::= sentencia_while\n\n");
+:};
+
+sentencia_mientras ::= MIENTRAS OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {:
+	System.out.println("Parser: sentence -> MIENTRAS OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET");
+:};
 
 // sentencia if 
-sentence ::= sentenciaSi{:
-	System.out.println("Parser: sentence -> sentenciaSi");
+sentence ::= sentencia_si{:
+	System.out.println("Parser: sentence -> sentencia_si\n\n");
 :};
-sentenciaSi ::= SI OPEN_BRACKET condition CLOSE_BRACKET OPEN_CURLY_BRACKET expression CLOSE_CURLY_BRACKET SINO OPEN_CURLY_BRACKET expression CLOSE_CURLY_BRACKET {:
-	System.out.println("Parser: sentence -> SI OPEN_BRACKET condition CLOSE_BRACKET OPEN_CURLY_BRACKET expression CLOSE_CURLY_BRACKET SINO OPEN_CURLY_BRACKET expression CLOSE_CURLY_BRACKET");
+
+sentencia_si ::= SI OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {:
+	System.out.println("Parser: sentencia_si -> SI OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET");
 :};
-expression ::= ESCRIBIR OPEN_BRACKET STRING_CONSTANT CLOSE_BRACKET {:
-	System.out.println("Parser: expression -> ESCRIBIR OPEN_BRACKET lista_escribir CLOSE_BRACKET");
+
+
+// sentencia if else
+sentence ::= sentencia_si_sino{:
+	System.out.println("Parser: sentence -> sentencia_si_sino\n\n");
 :};
-condition ::= IDENTIFIER GREATER_THAN IDENTIFIER {:
-	System.out.println("Parser: condition -> IDENTIFIER GREATER_THAN IDENTIFIER");
+
+sentencia_si_sino ::= SI OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET SINO OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {:
+	System.out.println("Parser: sentencia_si_sino -> SI OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET SINO OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET");
 :};
+
+//se crea un grupo de condiciones para abarcar todas los tipos de condicionales, ya sea de una condicion sola, una condicion sola pero negada o condiciones dobles
+condition_group ::= condition {:
+	System.out.println("Parser: condition_group -> condition");
+:};
+
+condition_group ::= NOT condition {:
+	System.out.println("Parser: condition_group -> NOT condition");
+:};
+
+condition_group ::= condition AND condition {:
+	System.out.println("Parser: condition_group -> condition AND condition");
+:};
+
+condition_group ::= condition OR condition {:
+	System.out.println("Parser: condition_group -> condition OR condition");
+:};
+
+condition ::= expression op_logico expression {:
+	System.out.println("Parser: condition -> expression op_logico expression");
+:};
+
+condition ::= NOT expression {:
+	System.out.println("Parser: condition -> NOT expression");
+:};
+
+op_logico ::= GREATER_THAN {:
+	System.out.println("Parser: op_logico ->  GREATER_THAN");
+:};
+
+op_logico ::= GREATER_THAN_EQUAL {:
+	System.out.println("Parser: op_logico ->  GREATER_THAN_EQUAL");
+:};
+
+op_logico ::= LESS_THAN {:
+	System.out.println("Parser: op_logico ->  LESS_THAN");
+:};
+
+op_logico ::= LESS_THAN_EQUAL {:
+	System.out.println("Parser: op_logico ->  LESS_THAN_EQUAL");
+:};
+
+op_logico ::= EQUAL {:
+	System.out.println("Parser: op_logico ->  EQUAL");
+:};
+
+op_logico ::= NOT_EQUAL {:
+	System.out.println("Parser: op_logico ->  NOT_EQUAL");
+:};
+

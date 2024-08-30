@@ -1,3 +1,5 @@
-si ( a1 > b1 OR c1 > d1) {
-	c1 := d1
-}
+*-this is a comment-*
+
+a := b
+
+*-la linea anterior la pongo para que el programa no crashee por estar vacio, con tener una sentencia se arregla-*
