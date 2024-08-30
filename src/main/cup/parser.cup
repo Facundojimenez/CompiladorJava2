@@ -106,8 +106,9 @@ non terminal bloque_inicializacion;
 non terminal sentencia_inicializacion;
 non terminal lista_identificadores;
 non terminal tipo_dato;
-non terminal mostrar;
 non terminal condition;
+non terminal sentenciaSi;
+
 
 // Start Symbol Definition
 start with program;
@@ -200,15 +201,15 @@ tipo_dato ::= STRING {:
 :};
 
 
-// sentencia de if
-sentence ::= SI OPEN_BRACKET condition CLOSE_BRACKET OPEN_CURLY_BRACKET expression CLOSE_CURLY_BRACKET SINO OPEN_CURLY_BRACKET expression CLOSE_CURLY_BRACKET {:
+// sentencia if 
+sentence ::= sentenciaSi{:
+	System.out.println("Parser: sentence -> sentenciaSi");
+:};
+sentenciaSi ::= SI OPEN_BRACKET condition CLOSE_BRACKET OPEN_CURLY_BRACKET expression CLOSE_CURLY_BRACKET SINO OPEN_CURLY_BRACKET expression CLOSE_CURLY_BRACKET {:
 	System.out.println("Parser: sentence -> SI OPEN_BRACKET condition CLOSE_BRACKET OPEN_CURLY_BRACKET expression CLOSE_CURLY_BRACKET SINO OPEN_CURLY_BRACKET expression CLOSE_CURLY_BRACKET");
 :};
-expression ::= mostrar {:
-	System.out.println("Parser: expression -> mostrar");
-:};
-mostrar ::= ESCRIBIR OPEN_BRACKET STRING_CONSTANT CLOSE_BRACKET {:
-	System.out.println("Parser: mostrar -> ESCRIBIR OPEN_BRACKET STRING_CONSTANT CLOSE_BRACKET");
+expression ::= ESCRIBIR OPEN_BRACKET STRING_CONSTANT CLOSE_BRACKET {:
+	System.out.println("Parser: expression -> ESCRIBIR OPEN_BRACKET lista_escribir CLOSE_BRACKET");
 :};
 condition ::= IDENTIFIER GREATER_THAN IDENTIFIER {:
 	System.out.println("Parser: condition -> IDENTIFIER GREATER_THAN IDENTIFIER");
