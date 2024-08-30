@@ -1,0 +1,4 @@
+leer("mi string")
+leer(nroCuenta1)
+
+leer(base) *- base es una variable -*

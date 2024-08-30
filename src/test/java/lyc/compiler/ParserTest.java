@@ -43,13 +43,17 @@ public class ParserTest {
     @Disabled
     @Test
     void write() throws Exception {
+        System.out.println("---------Corriendo test de WRITE---------------");
         compilationSuccessful(readFromFile("write.txt"));
+        System.out.println("---------FIN test de WRITE---------------\n");
     }
 
-    @Disabled
     @Test
     void read() throws Exception {
+        System.out.println("---------Corriendo test de READ---------------");
         compilationSuccessful(readFromFile("read.txt"));
+        System.out.println("---------FIN test de READ---------------\n");
+
     }
 
     @Test

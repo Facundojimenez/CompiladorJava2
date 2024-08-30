@@ -111,6 +111,9 @@ non terminal sentencia_inicializacion;
 non terminal sentencia_si;
 non terminal sentencia_si_sino;
 non terminal sentencia_mientras;
+non terminal sentencia_leer;
+non terminal sentencia_escribir;
+
 
 // --- condicionales y comparadores
 non terminal condition_group;
@@ -206,6 +209,27 @@ tipo_dato ::= STRING {:
             insertar(id.toString(), "STRING", null, false);
         }
 	variables.clear();
+:};
+
+// sentencia leer
+sentence ::= sentencia_leer {:
+	System.out.println("Parser: sentence ::= sentencia_leer\n\n");
+:};
+
+sentencia_leer ::= LEER OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {:
+	System.out.println("Parser: sentencia_leer ::= LEER OPEN_BRACKET IDENTIFIER (" + id + ") CLOSE_BRACKET");
+:};
+
+sentencia_leer ::= LEER OPEN_BRACKET INTEGER_CONSTANT:cte CLOSE_BRACKET {:
+	System.out.println("Parser: sentencia_leer ::= LEER OPEN_BRACKET INTEGER_CONSTANT (" + cte + ") CLOSE_BRACKET");
+:};
+
+sentencia_leer ::= LEER OPEN_BRACKET FLOAT_CONSTANT:cte CLOSE_BRACKET {:
+	System.out.println("Parser: sentencia_leer ::= LEER OPEN_BRACKET FLOAT_CONSTANT (" + cte + ") CLOSE_BRACKET");
+:};
+
+sentencia_leer ::= LEER OPEN_BRACKET STRING_CONSTANT:cte CLOSE_BRACKET {:
+	System.out.println("Parser: sentencia_leer ::= LEER OPEN_BRACKET STRING_CONSTANT (" + cte + ") CLOSE_BRACKET");
 :};
 
 // sentencia while
