@@ -109,6 +109,8 @@ OpenBracket = "("
 CloseBracket = ")"
 OpenCurlyBracket = "{"
 CloseCurlyBracket = "}"
+OpenSquareBracket = "["
+CloseSquareBracket = "]"
 Comma=","
 Dot="."
 Colon=":"
@@ -195,6 +197,8 @@ Comment = "*-"({Letter}|{Digit}|{WhiteSpace}|{SpecialCharacters})*"-*"
   {CloseBracket}                        { return symbol(ParserSym.CLOSE_BRACKET); }
   {OpenCurlyBracket}                    { return symbol(ParserSym.OPEN_CURLY_BRACKET); }
   {CloseCurlyBracket}                   { return symbol(ParserSym.CLOSE_CURLY_BRACKET); }
+  {OpenSquareBracket}                   { return symbol(ParserSym.OPEN_SQUARE_BRACKET); }
+  {CloseSquareBracket}                  { return symbol(ParserSym.CLOSE_SQUARE_BRACKET); }
   {Comma}                     			{ return symbol(ParserSym.COMMA); }
   {Dot}                     			{ return symbol(ParserSym.DOT); }
   {Colon}                   			{ return symbol(ParserSym.COLON); }

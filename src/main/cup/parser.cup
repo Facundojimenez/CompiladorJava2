@@ -75,6 +75,8 @@ terminal OPEN_BRACKET;
 terminal CLOSE_BRACKET;
 terminal OPEN_CURLY_BRACKET;
 terminal CLOSE_CURLY_BRACKET;
+terminal OPEN_SQUARE_BRACKET;
+terminal CLOSE_SQUARE_BRACKET;
 terminal COMMA;
 terminal DOT;
 terminal COLON;
@@ -105,6 +107,9 @@ non terminal bloque_inicializacion;
 non terminal inicializacion;
 non terminal lista_identificadores;
 non terminal tipo_dato;
+non terminal lista;
+non terminal elementos_lista;
+
 
 // -- sentencias del lenguaje
 non terminal sentencia_inicializacion;
@@ -113,6 +118,8 @@ non terminal sentencia_si_sino;
 non terminal sentencia_mientras;
 non terminal sentencia_leer;
 non terminal sentencia_escribir;
+non terminal sentencia_binarycount;
+non terminal sentencia_triangulo;
 
 
 // --- condicionales y comparadores
@@ -134,6 +141,12 @@ sentence ::= assignment {:
 :};
 assignment ::= IDENTIFIER:id ASSIG expression {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG expression");
+:};
+assignment ::= IDENTIFIER:id ASSIG sentencia_binarycount {:
+	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG sentencia_binarycount");
+:};
+assignment ::= IDENTIFIER:id ASSIG sentencia_triangulo {:
+	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG sentencia_triangulo");
 :};
 expression ::= expression PLUS term {:
 	System.out.println("Parser: expression -> expression PLUS term");
@@ -158,7 +171,18 @@ factor ::= IDENTIFIER:id  {:
 :};
 factor ::= INTEGER_CONSTANT:constant {:
 	System.out.println("Parser: factor -> INTEGER_CONSTANT (" + constant + ")");
-	insertar(constant.toString(), null, constant.toString(), true);
+	insertar(constant.toString(), "INT", constant.toString(), true);
+:};
+factor ::= FLOAT_CONSTANT:constant {:
+	System.out.println("Parser: factor -> FLOAT_CONSTANT (" + constant + ")");
+	insertar(constant.toString(), "FLOAT", constant.toString(), true);
+:};
+factor ::= STRING_CONSTANT:constant {:
+	System.out.println("Parser: factor -> STRING_CONSTANT (" + constant + ")");
+	//se eliminan los "" de la cte antes de almacenar en la tabla.
+	String s = constant.toString();
+	s = s.substring(1,s.length()-1);
+	insertar(s, "STRING", s, true); 
 :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {:
 	System.out.println("Parser: factor -> OPEN_BRACKET expression CLOSE_BRACKET");
@@ -309,3 +333,19 @@ op_logico ::= NOT_EQUAL {:
 	System.out.println("Parser: op_logico ->  NOT_EQUAL");
 :};
 
+//sentencia binaryCount
+sentencia_binarycount ::= BINARY_COUNT OPEN_BRACKET lista CLOSE_BRACKET  {:
+	System.out.println("Parser: sentencia_binarycount -> BINARY_COUNT OPEN_BRACKET lista CLOSE_BRACKET");
+:};
+lista ::= OPEN_SQUARE_BRACKET elementos_lista CLOSE_SQUARE_BRACKET  {:
+	System.out.println("Parser: sentencia_binarycount -> OPEN_SQUARE_BRACKET elementos_lista CLOSE_SQUARE_BRACKET");
+:};
+elementos_lista ::= elementos_lista COMMA factor {:
+	System.out.println("Parser: sentencia_binarycount -> elementos_lista COMMA factor");
+:};
+elementos_lista ::= factor {:
+	System.out.println("Parser: sentencia_binarycount -> factor");
+:};
+
+//sentencia triangulo
+sentencia_triangulo ::= TRIANGULO OPEN_BRACKET factor COMMA factor COMMA factor CLOSE_BRACKET;
