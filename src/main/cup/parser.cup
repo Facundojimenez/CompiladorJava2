@@ -148,6 +148,13 @@ assignment ::= IDENTIFIER:id ASSIG sentencia_binarycount {:
 assignment ::= IDENTIFIER:id ASSIG sentencia_triangulo {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG sentencia_triangulo");
 :};
+assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:constant {:
+	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG STRING_CONSTANT (" + constant + ")");
+	//se eliminan los "" de la cte antes de almacenar en la tabla.
+	String s = constant.toString();
+	s = s.substring(1,s.length()-1);
+	insertar(s, "STRING", s, true); 
+:};
 expression ::= expression PLUS term {:
 	System.out.println("Parser: expression -> expression PLUS term");
 :};
@@ -177,13 +184,7 @@ factor ::= FLOAT_CONSTANT:constant {:
 	System.out.println("Parser: factor -> FLOAT_CONSTANT (" + constant + ")");
 	insertar(constant.toString(), "FLOAT", constant.toString(), true);
 :};
-factor ::= STRING_CONSTANT:constant {:
-	System.out.println("Parser: factor -> STRING_CONSTANT (" + constant + ")");
-	//se eliminan los "" de la cte antes de almacenar en la tabla.
-	String s = constant.toString();
-	s = s.substring(1,s.length()-1);
-	insertar(s, "STRING", s, true); 
-:};
+
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {:
 	System.out.println("Parser: factor -> OPEN_BRACKET expression CLOSE_BRACKET");
 :};
@@ -348,6 +349,6 @@ elementos_lista ::= factor {:
 :};
 
 //sentencia triangulo
-sentencia_triangulo ::= TRIANGULO OPEN_BRACKET factor COMMA factor COMMA factor CLOSE_BRACKET; {:
+sentencia_triangulo ::= TRIANGULO OPEN_BRACKET factor COMMA factor COMMA factor CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_triangulo -> TRIANGULO OPEN_BRACKET factor COMMA factor COMMA factor CLOSE_BRACKET");
 :};
