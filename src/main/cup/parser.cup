@@ -257,6 +257,27 @@ sentencia_leer ::= LEER OPEN_BRACKET STRING_CONSTANT:cte CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_leer ::= LEER OPEN_BRACKET STRING_CONSTANT (" + cte + ") CLOSE_BRACKET");
 :};
 
+// sentencia escribir
+sentence ::= sentencia_escribir {:
+	System.out.println("Parser: sentence ::= sentencia_escribir\n\n");
+:};
+
+sentencia_escribir ::= ESCRIBIR OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {:
+	System.out.println("Parser: sentencia_escribir ::= ESCRIBIR OPEN_BRACKET IDENTIFIER (" + id + ") CLOSE_BRACKET");
+:};
+
+sentencia_escribir ::= ESCRIBIR OPEN_BRACKET INTEGER_CONSTANT:cte CLOSE_BRACKET {:
+	System.out.println("Parser: sentencia_escribir ::= ESCRIBIR OPEN_BRACKET INTEGER_CONSTANT (" + cte + ") CLOSE_BRACKET");
+:};
+
+sentencia_escribir ::= ESCRIBIR OPEN_BRACKET FLOAT_CONSTANT:cte CLOSE_BRACKET {:
+	System.out.println("Parser: ssentencia_escribir ::= ESCRIBIR OPEN_BRACKET FLOAT_CONSTANT (" + cte + ") CLOSE_BRACKET");
+:};
+
+sentencia_escribir ::= ESCRIBIR OPEN_BRACKET STRING_CONSTANT:cte CLOSE_BRACKET {:
+	System.out.println("Parser: sentencia_escribir ::= ESCRIBIR OPEN_BRACKET STRING_CONSTANT (" + cte + ") CLOSE_BRACKET");
+:};
+
 // sentencia while
 sentence ::= sentencia_mientras {:
 	System.out.println("Parser: sentence ::= sentencia_while\n\n");
