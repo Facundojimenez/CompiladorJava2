@@ -348,4 +348,6 @@ elementos_lista ::= factor {:
 :};
 
 //sentencia triangulo
-sentencia_triangulo ::= TRIANGULO OPEN_BRACKET factor COMMA factor COMMA factor CLOSE_BRACKET;
+sentencia_triangulo ::= TRIANGULO OPEN_BRACKET factor COMMA factor COMMA factor CLOSE_BRACKET; {:
+	System.out.println("Parser: sentencia_triangulo -> TRIANGULO OPEN_BRACKET factor COMMA factor COMMA factor CLOSE_BRACKET");
+:};
