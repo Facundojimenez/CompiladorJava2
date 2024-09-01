@@ -54,7 +54,7 @@ LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 Identation =  [ \t\f]
 
-SpecialCharacters = ["$"|"&"|"+"|","|":"|";"|"!"|"?"|"@"|"#"|"|"|"'"|"<"|">"|"."|"^"|"*"|"("|")"|"%"|"!"|"-"|"\""|"/"]
+SpecialCharacters = ["$"|"&"|"+"|","|":"|";"|"!"|"?"|"@"|"#"|"|"|"'"|"<"|">"|"."|"^"|"*"|"("|")"|"%"|"!"|"-"|"\""|"/"|"="]
 Letter = [a-zA-Z]
 Digit = [0-9]
 
@@ -130,8 +130,9 @@ StringConstant = "\""({Letter}|{Digit}|{SpecialCharacters}|{Identation})*"\""
 /* ----------------------- Elementos que se detectan pero NO producen TOKENS ------------------- */
 
 WhiteSpace = {LineTerminator} | {Identation}
-Comment = "*-"({Letter}|{Digit}|{WhiteSpace}|{SpecialCharacters})*"-*"
-
+//Permitir comentarios con cualquier caracter, incluyendo * y -, pero no permitir -* dentro del comentario.
+CommentCharacters = {Letter}|{Digit}|{WhiteSpace}|["["|"]"|"$"|"{"|"}"|"_"|"&"|"+"|","|":"|";"|"!"|"?"|"@"|"#"|"|"|"'"|"<"|">"|"."|"^"|"("|")"|"%"|"!"|"\""|"/"|"="]
+Comment = "*-"  ((("-"+{CommentCharacters})* | ({CommentCharacters}|"*")* )*)* "-"*  "-*"
 %%
 
 /* 
