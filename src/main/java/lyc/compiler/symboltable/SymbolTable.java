@@ -18,9 +18,9 @@ public class SymbolTable {
     }
 
     public void add(String nombre,String tipo,String valor,int longitud, boolean esConstante){
-        nombre = "_"+nombre.replace(" ","_");//para evitar problemas al pasar el codigo a ASM
+        nombre = nombre.replace(" ","_");//para evitar problemas al pasar el codigo a ASM
 
-        //En caso de que un token sea CTE de algun tipo, se le agrega un "_" extra
+        //En caso de que un token sea CTE de algun tipo, se le agrega un "_"
         if(esConstante){
             nombre = "_"+nombre;
         }

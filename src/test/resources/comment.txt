@@ -1,5 +1,7 @@
-*-this is a comment-*
+*- prueba de comentarios -*
+*-se incluye el init porque no se permite compilar un programa vacio-*
 
-a := b
+init {
+    a1, b2 : Int
+}
 
-*-la linea anterior la pongo para que el programa no crashee por estar vacio, con tener una sentencia se arregla-*
