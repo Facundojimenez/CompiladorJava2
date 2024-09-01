@@ -42,7 +42,40 @@ a1 := b2 * 3  + (b2 + 1) - edad
 a1 := binaryCount([110,1,0,5,a1,1010, 1])
 b2 := triangulo(a1, 1+1, b2)
 
-a := si
-
 *- aca finaliza el programa -*
 
+
+*- Casos de error de LEXICO:-*
+
+*-  CTE ENTERA FUERA DE RANGO -*
+*- a := 999999999 -*
+
+*-  CTE FLOAT FUERA DE RANGO -*
+*- a := 999999999999999.99 -*
+
+*-  CTE STRING FUERA DE RANGO -*
+*- a := "SDA DASDADADASDASDAD DADASDAD ADADSD AD ADADADAD A ADASD ASD AD" -*
+
+*- ID DEMASIADO LARGO -*
+*- miIdSuperMegaUltraLargo123456789Prueba -*
+
+
+
+
+
+*- Casos de error de SINTAXIS-*
+
+
+*- ASIGNACION INVALIDA -*
+*- a := si -*
+
+
+*- BUCLE WHILE INVALIDO  -*
+*- mientras ( 4 > 5) {} -*
+
+*- IF INVALIDO  -*
+*- si 4 > 5 { a := b} -*
+
+
+*- CONDICIONAL INVALIDO  -*
+*- mientras ( 4 > 5 > 6 > 7) {} -*
