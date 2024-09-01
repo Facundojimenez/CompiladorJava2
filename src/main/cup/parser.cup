@@ -131,7 +131,11 @@ non terminal op_logico;
 // Start Symbol Definition
 start with program;
 
-program ::= block;
+program ::= block {:
+  System.out.println("Parser: program -> block");
+  System.out.println("--------------- COMPILACION EXITOSA ------------------\n\n");
+:};
+
 block ::= block sentence;
 block ::= sentence;
 
@@ -238,7 +242,7 @@ tipo_dato ::= STRING {:
 
 // sentencia leer
 sentence ::= sentencia_leer {:
-	System.out.println("Parser: sentence ::= sentencia_leer\n\n");
+	System.out.println("Parser: sentence ::= sentencia_leer");
 :};
 
 sentencia_leer ::= LEER OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {:
@@ -259,7 +263,7 @@ sentencia_leer ::= LEER OPEN_BRACKET STRING_CONSTANT:cte CLOSE_BRACKET {:
 
 // sentencia escribir
 sentence ::= sentencia_escribir {:
-	System.out.println("Parser: sentence ::= sentencia_escribir\n\n");
+	System.out.println("Parser: sentence ::= sentencia_escribir");
 :};
 
 sentencia_escribir ::= ESCRIBIR OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {:

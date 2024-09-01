@@ -1,11 +1,44 @@
+*- se inicializan las variables -*
+
 init {
-    a1, b2 : Int
+    a1, b2, edad : Int
     c3 : Float
-    d4, d5, d6 : String
+    d4, d5, d6, genero : String
 }
 
-si ( a > b) {
-	c := d
+a1 := 4
+b2 := 9
+edad := 19
+
+c3 := 5.5
+
+d4 := "Test"
+d5 := "Hola"
+d6 := "Buenas tardes"
+
+si (edad >= 18){
+	escribir("Sos mayor de edad")
 }
 
-c:=d*(e-21)/4
+mientras (a1 < (b2 + 3)){
+	a1 := a1 + 1
+}
+
+*- esto es un comentario -*
+
+si ( d4 == d5 AND d4 == d6){
+	escribir("d4 es igual a d5 y d6")
+}
+sino {
+	escribir("d4 no es igual a d5 o d6")
+}
+
+si (NOT a1 OR NOT b2){
+	leer("Hola")
+}
+
+a1 := b2 * 3  + (b2 + 1) - edad
+
+
+*- aca finaliza el programa -*
+
