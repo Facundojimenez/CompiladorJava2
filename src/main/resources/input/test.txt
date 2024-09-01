@@ -39,6 +39,10 @@ si (NOT a1 OR NOT b2){
 
 a1 := b2 * 3  + (b2 + 1) - edad
 
+a1 := binaryCount([110,1,0,5,a1,1010, 1])
+b2 := triangulo(a1, 1+1, b2)
+
+a := si
 
 *- aca finaliza el programa -*
 
