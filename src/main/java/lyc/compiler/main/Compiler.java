@@ -7,6 +7,7 @@ import lyc.compiler.files.FileOutputWriter;
 import lyc.compiler.files.SymbolTableGenerator;
 import lyc.compiler.files.IntermediateCodeGenerator;
 import lyc.compiler.files.AsmCodeGenerator;
+import lyc.compiler.polacaInversa.PolacaInversa;
 import lyc.compiler.symboltable.SymbolTable;
 
 import java.io.IOException;
@@ -42,6 +43,13 @@ public final class Compiler {
         System.out.println(tabla);
 
         System.out.println("------------------ FIN TABLA DE SIMBOLOS ------------------");
+
+        System.out.println("\n\n\n------------------ MOSTRANDO NOTACION INTERMEDIA POLACA INVERSA ------------------");
+
+        PolacaInversa polacaInversa = PolacaInversa.getPolacaInversa();
+        System.out.println(polacaInversa);
+
+        System.out.println("------------------ FIN DE LA NOTACION INTERMEDIA ------------------");
 
         System.out.println("Compilation Successful");
 

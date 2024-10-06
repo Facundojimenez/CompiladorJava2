@@ -2,6 +2,7 @@ package lyc.compiler;
 
 import java_cup.runtime.*;
 import lyc.compiler.symboltable.SymbolTable;
+import lyc.compiler.polacaInversa.PolacaInversa;
 
 import java.util.ArrayList;
 class Parser;
@@ -17,7 +18,11 @@ public void insertar(String nombre, String tipo, String valor, boolean esConstan
         longitud = valor.length();
     }
     tabla.add(nombre,tipo,valor,longitud, esConstante);
-   }
+ }
+
+ public void insertarEnPolaca(String elemento){
+ 	PolacaInversa.getPolacaInversa().insertar(elemento);
+ }
 
 :};
 
@@ -145,6 +150,8 @@ sentence ::= assignment {:
 :};
 assignment ::= IDENTIFIER:id ASSIG expression {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG expression");
+	insertarEnPolaca(id.toString());
+	insertarEnPolaca(":=");
 :};
 assignment ::= IDENTIFIER:id ASSIG sentencia_binarycount {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG sentencia_binarycount");
@@ -157,38 +164,55 @@ assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:constant {:
 	//se eliminan los "" de la cte antes de almacenar en la tabla.
 	String s = constant.toString();
 	s = s.substring(1,s.length()-1);
-	insertar(s, "STRING", s, true); 
+	insertar(s, "STRING", s, true);
+
+
+	insertarEnPolaca(constant.toString());
+	insertarEnPolaca(id.toString());
+	insertarEnPolaca(":=");
 :};
 expression ::= expression PLUS term {:
 	System.out.println("Parser: expression -> expression PLUS term");
+	insertarEnPolaca("+");
 :};
 expression ::= expression SUB term {:
 	System.out.println("Parser: expression -> expression SUB term");
+	insertarEnPolaca("-");
 :};
+
+//En este no hace falta agregar nada para la notación intermedia
 expression ::= term {:
 	System.out.println("Parser: expression -> term");
 :};
 term ::= term MULT factor {:
 	System.out.println("Parser: term -> term MULT factor");
+	insertarEnPolaca("*");
 :};
 term ::= term DIV factor {:
 	System.out.println("Parser: term -> term DIV factor");
+	insertarEnPolaca("/");
 :};
+
+//En este no hace falta agregar nada para la notación intermedia
 term ::= factor {:
 	System.out.println("Parser: term -> factor");
 :};
 factor ::= IDENTIFIER:id  {:
 	System.out.println("Parser: factor -> IDENTIFIER (" + id + ")");
+	insertarEnPolaca(id.toString());
 :};
 factor ::= INTEGER_CONSTANT:constant {:
 	System.out.println("Parser: factor -> INTEGER_CONSTANT (" + constant + ")");
 	insertar(constant.toString(), "INT", constant.toString(), true);
+	insertarEnPolaca(constant.toString());
 :};
 factor ::= FLOAT_CONSTANT:constant {:
 	System.out.println("Parser: factor -> FLOAT_CONSTANT (" + constant + ")");
 	insertar(constant.toString(), "FLOAT", constant.toString(), true);
+	insertarEnPolaca(constant.toString());
 :};
 
+//En este no hace falta agregar nada para la notación intermedia
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {:
 	System.out.println("Parser: factor -> OPEN_BRACKET expression CLOSE_BRACKET");
 :};
