@@ -21,6 +21,12 @@ public class PolacaInversa {
     public void insertar(String elemento){
         this.listaElementos.add(elemento);
     }
+    public void reemplazar(int posicion, String valor){
+        this.listaElementos.set(posicion, valor);
+    }
+    public int size(){
+        return this.listaElementos.size();
+    }
 
     @Override
     public String toString(){

@@ -1,5 +1,6 @@
 package lyc.compiler;
 
+import java.util.Stack;
 import java_cup.runtime.*;
 import lyc.compiler.symboltable.SymbolTable;
 import lyc.compiler.polacaInversa.PolacaInversa;
@@ -9,6 +10,8 @@ class Parser;
 
 action code {:
 
+public Stack<Integer> pila = new Stack();
+public String condicional;
 public ArrayList<String> variables = new ArrayList<String>();
 public void insertar(String nombre, String tipo, String valor, boolean esConstante){
     SymbolTable tabla = SymbolTable.getSymbolTable();
@@ -22,6 +25,12 @@ public void insertar(String nombre, String tipo, String valor, boolean esConstan
 
  public void insertarEnPolaca(String elemento){
  	PolacaInversa.getPolacaInversa().insertar(elemento);
+ }
+ public void reemplazarEnPolaca(int posicion, String valor){
+	PolacaInversa.getPolacaInversa().reemplazar(posicion,valor);
+ }
+ public int getSizePolaca(){
+	return PolacaInversa.getPolacaInversa().size();
  }
 
 :};
@@ -120,6 +129,7 @@ non terminal elementos_lista;
 non terminal sentencia_inicializacion;
 non terminal sentencia_si;
 non terminal sentencia_si_sino;
+non terminal else;
 non terminal sentencia_mientras;
 non terminal sentencia_leer;
 non terminal sentencia_escribir;
@@ -317,6 +327,7 @@ sentencia_mientras ::= MIENTRAS OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_
 
 // sentencia if 
 sentence ::= sentencia_si{:
+	reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+1));
 	System.out.println("Parser: sentence -> sentencia_si\n\n");
 :};
 
@@ -327,11 +338,21 @@ sentencia_si ::= SI OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKE
 
 // sentencia if else
 sentence ::= sentencia_si_sino{:
+	reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+1));
 	System.out.println("Parser: sentence -> sentencia_si_sino\n\n");
 :};
 
-sentencia_si_sino ::= SI OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET SINO OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {:
-	System.out.println("Parser: sentencia_si_sino -> SI OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET SINO OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET");
+sentencia_si_sino ::= SI OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET else SINO OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {:
+	System.out.println("Parser: sentencia_si_sino -> SI OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET else SINO OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET");
+:};
+
+else ::= {:
+	
+	reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+3));// CMP BXX #NUM +1 posicion siguiente, +2 saltea BI #NUM
+	insertarEnPolaca("BI");
+	insertarEnPolaca("#");
+	pila.add(getSizePolaca());//ubicacion de salto si condicion del if es falsa
+	//System.out.println("*******************************************");
 :};
 
 //se crea un grupo de condiciones para abarcar todas los tipos de condicionales, ya sea de una condicion sola, una condicion sola pero negada o condiciones dobles
@@ -352,34 +373,48 @@ condition_group ::= condition OR condition {:
 :};
 
 condition ::= expression op_logico expression {:
+	insertarEnPolaca("CMP");
+	insertarEnPolaca(condicional);
+	insertarEnPolaca("#");
+	pila.add(getSizePolaca());
 	System.out.println("Parser: condition -> expression op_logico expression");
 :};
 
 condition ::= NOT expression {:
+	insertarEnPolaca("CMP");
+	insertarEnPolaca(condicional);
+	insertarEnPolaca("#");
+	pila.add(getSizePolaca());
 	System.out.println("Parser: condition -> NOT expression");
 :};
 
 op_logico ::= GREATER_THAN {:
+	condicional = "BLE";
 	System.out.println("Parser: op_logico ->  GREATER_THAN");
 :};
 
 op_logico ::= GREATER_THAN_EQUAL {:
+	condicional = "BLT";
 	System.out.println("Parser: op_logico ->  GREATER_THAN_EQUAL");
 :};
 
 op_logico ::= LESS_THAN {:
+	condicional = "BGE";
 	System.out.println("Parser: op_logico ->  LESS_THAN");
 :};
 
 op_logico ::= LESS_THAN_EQUAL {:
+	condicional = "BGT";
 	System.out.println("Parser: op_logico ->  LESS_THAN_EQUAL");
 :};
 
 op_logico ::= EQUAL {:
+	condicional = "BNE";
 	System.out.println("Parser: op_logico ->  EQUAL");
 :};
 
 op_logico ::= NOT_EQUAL {:
+	condicional = "BEQ";
 	System.out.println("Parser: op_logico ->  NOT_EQUAL");
 :};
 
