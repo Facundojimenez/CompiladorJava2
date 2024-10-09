@@ -131,6 +131,7 @@ non terminal sentencia_si;
 non terminal sentencia_si_sino;
 non terminal else;
 non terminal sentencia_mientras;
+non terminal etiqueta;
 non terminal sentencia_leer;
 non terminal sentencia_escribir;
 non terminal sentencia_binarycount;
@@ -318,13 +319,19 @@ sentencia_escribir ::= ESCRIBIR OPEN_BRACKET STRING_CONSTANT:cte CLOSE_BRACKET {
 
 // sentencia while
 sentence ::= sentencia_mientras {:
+	reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+3));
+	insertarEnPolaca("BI");
+	insertarEnPolaca(""+pila.pop());
 	System.out.println("Parser: sentence ::= sentencia_while\n\n");
 :};
 
-sentencia_mientras ::= MIENTRAS OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {:
-	System.out.println("Parser: sentence -> MIENTRAS OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET");
+sentencia_mientras ::= MIENTRAS OPEN_BRACKET etiqueta condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {:
+	System.out.println("Parser: sentence -> MIENTRAS OPEN_BRACKET etiqueta condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET");
 :};
-
+etiqueta ::= {:
+	insertarEnPolaca("ET");
+	pila.add(getSizePolaca());
+:};
 // sentencia if 
 sentence ::= sentencia_si{:
 	reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+1));

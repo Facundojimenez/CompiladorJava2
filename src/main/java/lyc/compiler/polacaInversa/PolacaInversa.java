@@ -27,10 +27,12 @@ public class PolacaInversa {
     public int size(){
         return this.listaElementos.size();
     }
+    //rellena con espacios segun necesario para alinear el toString
     private String rellenar(String str, int length) {
         return String.format("%"+ length + "s", str);
     }
     @Override
+    //para mirar bien la tabla si es muy grande, copienla a un notepad y desactiven "ajuste de linea"
     public String toString(){
         //Armado de la tabla
         String numeracion = "|";
