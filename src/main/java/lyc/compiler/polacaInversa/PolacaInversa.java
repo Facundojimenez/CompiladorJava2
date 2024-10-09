@@ -27,13 +27,24 @@ public class PolacaInversa {
     public int size(){
         return this.listaElementos.size();
     }
-
+    private String rellenar(String str, int length) {
+        return String.format("%"+ length + "s", str);
+    }
     @Override
     public String toString(){
+        //Armado de la tabla
+        String numeracion = "|";
         String out = "|";
-        for (String listaElemento: this.listaElementos) {
-            out += listaElemento + "|";
+        int max;
+        String elem, num;
+        for (int i = 0; i < listaElementos.size(); i++) {
+            elem = listaElementos.get(i);
+            num = ""+(i+1);
+            max = elem.length() > num.length() ? elem.length() : num.length();
+            numeracion += rellenar(num, max) +"|";
+            out += rellenar(elem, max)+ "|";
         }
-        return out;
+        return numeracion+"\n"+out;
     }
+
 }
