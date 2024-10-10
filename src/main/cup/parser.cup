@@ -282,18 +282,29 @@ sentence ::= sentencia_leer {:
 
 sentencia_leer ::= LEER OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_leer ::= LEER OPEN_BRACKET IDENTIFIER (" + id + ") CLOSE_BRACKET");
+	insertarEnPolaca("Leer");
+	insertarEnPolaca(id.toString());
 :};
 
 sentencia_leer ::= LEER OPEN_BRACKET INTEGER_CONSTANT:cte CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_leer ::= LEER OPEN_BRACKET INTEGER_CONSTANT (" + cte + ") CLOSE_BRACKET");
+	insertarEnPolaca("Leer");
+	insertarEnPolaca(cte.toString());
 :};
 
 sentencia_leer ::= LEER OPEN_BRACKET FLOAT_CONSTANT:cte CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_leer ::= LEER OPEN_BRACKET FLOAT_CONSTANT (" + cte + ") CLOSE_BRACKET");
+	insertarEnPolaca("Leer");
+	insertarEnPolaca(cte.toString());
 :};
 
 sentencia_leer ::= LEER OPEN_BRACKET STRING_CONSTANT:cte CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_leer ::= LEER OPEN_BRACKET STRING_CONSTANT (" + cte + ") CLOSE_BRACKET");
+	String s = cte.toString();
+	s = s.substring(1,s.length()-1);
+
+	insertarEnPolaca("Leer");
+	insertarEnPolaca(s.toString());
 :};
 
 // sentencia escribir
@@ -303,18 +314,29 @@ sentence ::= sentencia_escribir {:
 
 sentencia_escribir ::= ESCRIBIR OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_escribir ::= ESCRIBIR OPEN_BRACKET IDENTIFIER (" + id + ") CLOSE_BRACKET");
+	insertarEnPolaca("Escribir");
+	insertarEnPolaca(id.toString());
 :};
 
 sentencia_escribir ::= ESCRIBIR OPEN_BRACKET INTEGER_CONSTANT:cte CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_escribir ::= ESCRIBIR OPEN_BRACKET INTEGER_CONSTANT (" + cte + ") CLOSE_BRACKET");
+	insertarEnPolaca("Escribir");
+	insertarEnPolaca(cte.toString());
 :};
 
 sentencia_escribir ::= ESCRIBIR OPEN_BRACKET FLOAT_CONSTANT:cte CLOSE_BRACKET {:
 	System.out.println("Parser: ssentencia_escribir ::= ESCRIBIR OPEN_BRACKET FLOAT_CONSTANT (" + cte + ") CLOSE_BRACKET");
+	insertarEnPolaca("Escribir");
+	insertarEnPolaca(cte.toString());
 :};
 
 sentencia_escribir ::= ESCRIBIR OPEN_BRACKET STRING_CONSTANT:cte CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_escribir ::= ESCRIBIR OPEN_BRACKET STRING_CONSTANT (" + cte + ") CLOSE_BRACKET");
+	String s = cte.toString();
+	s = s.substring(1,s.length()-1);
+
+	insertarEnPolaca("Escribir");
+	insertarEnPolaca(s.toString());
 :};
 
 // sentencia while
