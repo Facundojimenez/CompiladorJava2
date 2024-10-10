@@ -22,3 +22,8 @@ sino {
 mientras (a*3-7 <= b*4){
     a := a+2
 }
+
+leer(base)
+
+escribir("hola")
+escribir(var1)
