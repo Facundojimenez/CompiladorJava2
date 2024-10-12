@@ -29,6 +29,11 @@ public void insertar(String nombre, String tipo, String valor, boolean esConstan
  public void reemplazarEnPolaca(int posicion, String valor){
 	PolacaInversa.getPolacaInversa().reemplazar(posicion,valor);
  }
+
+ public void avanzarPolaca(){
+ 	PolacaInversa.getPolacaInversa().insertar(" ");
+  }
+
  public int getSizePolaca(){
 	return PolacaInversa.getPolacaInversa().size();
  }
@@ -162,13 +167,16 @@ sentence ::= assignment {:
 assignment ::= IDENTIFIER:id ASSIG expression {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG expression");
 	insertarEnPolaca(id.toString());
-	insertarEnPolaca(":=");
+	insertarEnPolaca("=");
 :};
 assignment ::= IDENTIFIER:id ASSIG sentencia_binarycount {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG sentencia_binarycount");
 :};
 assignment ::= IDENTIFIER:id ASSIG sentencia_triangulo {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG sentencia_triangulo");
+	insertarEnPolaca("@tipoTriangulo");
+	insertarEnPolaca(id.toString());
+	insertarEnPolaca("=");
 :};
 assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:constant {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG STRING_CONSTANT (" + constant + ")");
@@ -180,7 +188,7 @@ assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:constant {:
 
 	insertarEnPolaca(constant.toString());
 	insertarEnPolaca(id.toString());
-	insertarEnPolaca(":=");
+	insertarEnPolaca("=");
 :};
 expression ::= expression PLUS term {:
 	System.out.println("Parser: expression -> expression PLUS term");
@@ -462,6 +470,80 @@ elementos_lista ::= factor {:
 :};
 
 //sentencia triangulo
-sentencia_triangulo ::= TRIANGULO OPEN_BRACKET expression COMMA expression COMMA expression CLOSE_BRACKET {:
+sentencia_triangulo ::= TRIANGULO OPEN_BRACKET expression COMMA {:
+	insertarEnPolaca("L1");
+	insertarEnPolaca("=");
+
+:} expression COMMA {:
+	insertarEnPolaca("L2");
+	insertarEnPolaca("=");
+:} expression  {:
+	insertarEnPolaca("L3");
+	insertarEnPolaca("=");
+:} CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_triangulo -> TRIANGULO OPEN_BRACKET factor COMMA factor COMMA factor CLOSE_BRACKET");
+
+	//Arranco definiendo que retornaria un triangulo isosceles, y luego comparando la igualdad de los lados cambio el valor de retorno a "equilatero" o "escaleno"
+	insertarEnPolaca("isosceles");
+	insertarEnPolaca("@tipoTriangulo");
+	insertarEnPolaca("=");
+
+	//if de verificación de triangulo equilatero:  L1 == L2 AND L2 == L3
+	insertarEnPolaca("L1");
+	insertarEnPolaca("L2");
+	insertarEnPolaca("CMP");
+	insertarEnPolaca("BNE");
+	pila.add(getSizePolaca());
+	avanzarPolaca();
+
+	insertarEnPolaca("L2");
+	insertarEnPolaca("L3");
+	insertarEnPolaca("CMP");
+	insertarEnPolaca("BNE");
+	pila.add(getSizePolaca());
+	avanzarPolaca();
+
+	insertarEnPolaca("equilatero");
+	insertarEnPolaca("@tipoTriangulo");
+	insertarEnPolaca("=");
+	insertarEnPolaca("BI");
+	reemplazarEnPolaca(pila.pop(), Integer.toString(getSizePolaca()+2));
+	reemplazarEnPolaca(pila.pop(), Integer.toString(getSizePolaca()+2));
+	pila.add(getSizePolaca());
+	avanzarPolaca();
+
+//
+//	//if de verificación de triangulo escaleno:  L1 != L2  AND L1 != L3 AND L2 != L3
+	insertarEnPolaca("L1");
+	insertarEnPolaca("L2");
+	insertarEnPolaca("CMP");
+	insertarEnPolaca("BEQ");
+	pila.add(getSizePolaca());
+	avanzarPolaca();
+//
+	insertarEnPolaca("L1");
+	insertarEnPolaca("L3");
+	insertarEnPolaca("CMP");
+	insertarEnPolaca("BEQ");
+	pila.add(getSizePolaca());
+	avanzarPolaca();
+
+	insertarEnPolaca("L2");
+	insertarEnPolaca("L3");
+	insertarEnPolaca("CMP");
+	insertarEnPolaca("BEQ");
+	pila.add(getSizePolaca());
+	avanzarPolaca();
+//
+	insertarEnPolaca("escaleno");
+	insertarEnPolaca("@tipoTriangulo");
+	insertarEnPolaca("=");
+	reemplazarEnPolaca(pila.pop(), Integer.toString(getSizePolaca()+1));
+	reemplazarEnPolaca(pila.pop(), Integer.toString(getSizePolaca()+1));
+	reemplazarEnPolaca(pila.pop(), Integer.toString(getSizePolaca()+1));
+	reemplazarEnPolaca(pila.pop(), Integer.toString(getSizePolaca()+1));
+
+	//retorno de funcion
+
+
 :};
