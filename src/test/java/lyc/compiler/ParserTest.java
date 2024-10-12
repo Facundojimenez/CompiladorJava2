@@ -21,7 +21,7 @@ public class ParserTest {
     @Test
     public void assignmentWithExpression() throws Exception {
         System.out.println("---------Corriendo test de ASIGNACION con EXPRESION---------------");
-        compilationSuccessful("c := d * (e - 21) / 4");
+        compilationSuccessful("init{ c,d,e : Int } c := d * (e - 21) / 4");
         System.out.println("---------FIN test de ASIGNACION con EXPRESION---------------\n");
 
     }

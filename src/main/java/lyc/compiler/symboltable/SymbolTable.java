@@ -17,6 +17,11 @@ public class SymbolTable {
         return SymbolTable.instancia;
     }
 
+    public boolean exists(String nombre){
+        nombre = nombre.replace(" ","_");
+        return tabla.containsKey(nombre);
+    }
+
     public void add(String nombre,String tipo,String valor,int longitud, boolean esConstante){
         nombre = nombre.replace(" ","_");//para evitar problemas al pasar el codigo a ASM
 

@@ -4,6 +4,7 @@ import java.util.Stack;
 import java_cup.runtime.*;
 import lyc.compiler.symboltable.SymbolTable;
 import lyc.compiler.polacaInversa.PolacaInversa;
+import lyc.compiler.model.*;
 
 import java.util.ArrayList;
 class Parser;
@@ -36,6 +37,13 @@ public void insertar(String nombre, String tipo, String valor, boolean esConstan
 
  public int getSizePolaca(){
 	return PolacaInversa.getPolacaInversa().size();
+ }
+
+ public void verificarId(Object id) throws UnknownIdException{
+	SymbolTable tabla = SymbolTable.getSymbolTable();
+	if (!tabla.exists(id.toString())){
+		throw new UnknownIdException("Identificador no declarado: "+id+"\n");
+	}
  }
 
 :};
@@ -166,25 +174,28 @@ sentence ::= assignment {:
 :};
 assignment ::= IDENTIFIER:id ASSIG expression {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG expression");
+	verificarId(id);
 	insertarEnPolaca(id.toString());
 	insertarEnPolaca("=");
 :};
 assignment ::= IDENTIFIER:id ASSIG sentencia_binarycount {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG sentencia_binarycount");
+	verificarId(id);
 :};
 assignment ::= IDENTIFIER:id ASSIG sentencia_triangulo {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG sentencia_triangulo");
+	verificarId(id);
 	insertarEnPolaca("@tipoTriangulo");
 	insertarEnPolaca(id.toString());
 	insertarEnPolaca("=");
 :};
 assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:constant {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG STRING_CONSTANT (" + constant + ")");
+	verificarId(id);
 	//se eliminan los "" de la cte antes de almacenar en la tabla.
 	String s = constant.toString();
 	s = s.substring(1,s.length()-1);
 	insertar(s, "STRING", s, true);
-
 
 	insertarEnPolaca(constant.toString());
 	insertarEnPolaca(id.toString());
@@ -218,6 +229,7 @@ term ::= factor {:
 :};
 factor ::= IDENTIFIER:id  {:
 	System.out.println("Parser: factor -> IDENTIFIER (" + id + ")");
+	verificarId(id);
 	insertarEnPolaca(id.toString());
 :};
 factor ::= INTEGER_CONSTANT:constant {:
@@ -290,6 +302,7 @@ sentence ::= sentencia_leer {:
 
 sentencia_leer ::= LEER OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_leer ::= LEER OPEN_BRACKET IDENTIFIER (" + id + ") CLOSE_BRACKET");
+	verificarId(id);
 	insertarEnPolaca("Leer");
 	insertarEnPolaca(id.toString());
 :};
@@ -322,6 +335,7 @@ sentence ::= sentencia_escribir {:
 
 sentencia_escribir ::= ESCRIBIR OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_escribir ::= ESCRIBIR OPEN_BRACKET IDENTIFIER (" + id + ") CLOSE_BRACKET");
+	verificarId(id);
 	insertarEnPolaca("Escribir");
 	insertarEnPolaca(id.toString());
 :};

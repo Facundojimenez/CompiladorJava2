@@ -1,3 +1,7 @@
+init {
+    nroCuenta1, base : String
+}
+
 leer("mi string")
 leer(nroCuenta1)
 

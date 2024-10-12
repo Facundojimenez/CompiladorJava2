@@ -1,3 +1,7 @@
+init {
+    a, b, c, d, a1, b1, c1, d1, e1 : Int
+}
+
 si ( a > b) {
 	c := d
 }
