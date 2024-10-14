@@ -284,9 +284,10 @@ term ::= factor {:
 factor ::= IDENTIFIER:id  {:
 	System.out.println("Parser: factor -> IDENTIFIER (" + id + ")");
 
+	verificarId(id);
+
 	apilarTipoDatoId(id.toString());
 
-	verificarId(id);
 	insertarEnPolaca(id.toString());
 :};
 factor ::= INTEGER_CONSTANT:constant {:

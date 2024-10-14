@@ -97,10 +97,20 @@ b2 := triangulo(a1,b2,c3)
 
 *- c3 := genero -*
 
+*- ASIGNACION A ID QUE NO EXISTE  -*
+
+*- idxx := 5.5 -*
+
 *- OPERACION ARITMETICA ENTRE INT Y STRING  -*
 
 *- a1 := 1 + 5 / genero -*
 
- *- OPERACION ARITMETICA ENTRE FLOAT Y STRING  -*
+*- OPERACION ARITMETICA ENTRE FLOAT Y STRING  -*
 
 *- c3 := 5.5 + genero -*
+
+*- OPERACION ARITMETICA CON ID QUE NO EXISTE  -*
+
+*- c3 := 5.5 - idxxxyy -*
+
+
