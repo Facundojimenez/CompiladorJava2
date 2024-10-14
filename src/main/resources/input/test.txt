@@ -6,14 +6,13 @@ init {
     d4, d5, d6, genero : String
 }
 
-y := triangulo(a,b,c)
+a1 := triangulo(a1,b2,c3)
 
-si (a < 3)
+si (a1 < 3)
 {
-   b:= c+1
+   c3 := c3 +1
 }
 sino {
-    a := 5
+    a1 := 5
 }
-
 

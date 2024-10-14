@@ -3,8 +3,10 @@ package lyc.compiler;
 import java.util.Stack;
 import java_cup.runtime.*;
 import lyc.compiler.symboltable.SymbolTable;
+import lyc.compiler.symboltable.Simbolo;
 import lyc.compiler.polacaInversa.PolacaInversa;
 import lyc.compiler.model.*;
+import lyc.compiler.TablaSintesis.TablaSintesis;
 
 import java.util.ArrayList;
 class Parser;
@@ -12,6 +14,7 @@ class Parser;
 action code {:
 
 public Stack<Integer> pila = new Stack();
+public Stack<String> pilaTipoDato = new Stack();
 public String condicional;
 public ArrayList<String> variables = new ArrayList<String>();
 public void insertar(String nombre, String tipo, String valor, boolean esConstante){
@@ -45,6 +48,41 @@ public void insertar(String nombre, String tipo, String valor, boolean esConstan
 		throw new UnknownIdException("Identificador no declarado: "+id+"\n");
 	}
  }
+
+ public String obtenerTipoDato(String lexema){
+ 	SymbolTable tabla = SymbolTable.getSymbolTable();
+ 	Simbolo simboloObtenido = tabla.getSymbol(lexema);
+ 	return  simboloObtenido.getTipo();
+  }
+
+ public void apilarTipoDatoId(String lexema){
+  String tipoDato = obtenerTipoDato(lexema);
+  pilaTipoDato.add(tipoDato);
+}
+
+public void apilarTipoDatoCte(String tipoDato){
+  pilaTipoDato.add(tipoDato);
+}
+
+public void resolverTipoDatoAsignacion() throws InvalidAsignmentException {
+
+	String leftSide = pilaTipoDato.pop();
+	String rightSide = pilaTipoDato.pop();
+
+	String tipoResultante = TablaSintesis.resolverTipoDatoAsignacion(leftSide, rightSide);
+}
+
+public void resolverTipoDatoOpAritmetica() throws InvalidAritmeticOperationException {
+
+	String leftSide = pilaTipoDato.pop();
+	String rightSide = pilaTipoDato.pop();
+
+	String tipoResultante = TablaSintesis.resolverTipoDatoAritmetica(leftSide, rightSide);
+
+	//se apila el tipo de dato del resultado de la operacion para encadenar con otras operaciones
+	pilaTipoDato.add(tipoResultante);
+
+}
 
 :};
 
@@ -175,6 +213,10 @@ sentence ::= assignment {:
 assignment ::= IDENTIFIER:id ASSIG expression {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG expression");
 	verificarId(id);
+
+	apilarTipoDatoId(id.toString());
+	resolverTipoDatoAsignacion();
+
 	insertarEnPolaca(id.toString());
 	insertarEnPolaca("=");
 :};
@@ -203,10 +245,16 @@ assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:constant {:
 :};
 expression ::= expression PLUS term {:
 	System.out.println("Parser: expression -> expression PLUS term");
+
+	resolverTipoDatoOpAritmetica();
+
 	insertarEnPolaca("+");
 :};
 expression ::= expression SUB term {:
 	System.out.println("Parser: expression -> expression SUB term");
+
+	resolverTipoDatoOpAritmetica();
+
 	insertarEnPolaca("-");
 :};
 
@@ -216,10 +264,16 @@ expression ::= term {:
 :};
 term ::= term MULT factor {:
 	System.out.println("Parser: term -> term MULT factor");
+
+	resolverTipoDatoOpAritmetica();
+
 	insertarEnPolaca("*");
 :};
 term ::= term DIV factor {:
 	System.out.println("Parser: term -> term DIV factor");
+
+	resolverTipoDatoOpAritmetica();
+
 	insertarEnPolaca("/");
 :};
 
@@ -229,16 +283,26 @@ term ::= factor {:
 :};
 factor ::= IDENTIFIER:id  {:
 	System.out.println("Parser: factor -> IDENTIFIER (" + id + ")");
+
+	apilarTipoDatoId(id.toString());
+
 	verificarId(id);
 	insertarEnPolaca(id.toString());
 :};
 factor ::= INTEGER_CONSTANT:constant {:
 	System.out.println("Parser: factor -> INTEGER_CONSTANT (" + constant + ")");
+
+
+	apilarTipoDatoCte("INT");
+
 	insertar(constant.toString(), "INT", constant.toString(), true);
 	insertarEnPolaca(constant.toString());
 :};
 factor ::= FLOAT_CONSTANT:constant {:
 	System.out.println("Parser: factor -> FLOAT_CONSTANT (" + constant + ")");
+
+	apilarTipoDatoCte("FLOAT");
+
 	insertar(constant.toString(), "FLOAT", constant.toString(), true);
 	insertarEnPolaca(constant.toString());
 :};

@@ -50,4 +50,8 @@ public class SymbolTable {
 
 
 
+    public Simbolo getSymbol(String nombre){
+        return tabla.get(nombre);
+    }
+
 }
