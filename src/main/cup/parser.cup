@@ -13,6 +13,8 @@ class Parser;
 
 action code {:
 
+boolean es_and = false;
+
 public Stack<Integer> pila = new Stack();
 public Stack<String> pilaTipoDato = new Stack();
 public String condicional;
@@ -428,10 +430,19 @@ sentencia_escribir ::= ESCRIBIR OPEN_BRACKET STRING_CONSTANT:cte CLOSE_BRACKET {
 
 // sentencia while
 sentence ::= sentencia_mientras {:
-	reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+3));
-	insertarEnPolaca("BI");
-	insertarEnPolaca(""+pila.pop());
-	System.out.println("Parser: sentence ::= sentencia_while\n\n");
+	if(es_and == true){
+		reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+3));
+		reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+3));
+		insertarEnPolaca("BI");
+		insertarEnPolaca(""+pila.pop());
+		System.out.println("Parser: sentence ::= sentencia_while\n\n");
+		es_and = false;
+	}else{
+		reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+3));
+		insertarEnPolaca("BI");
+		insertarEnPolaca(""+pila.pop());
+		System.out.println("Parser: sentence ::= sentencia_while\n\n");
+	}
 :};
 
 sentencia_mientras ::= MIENTRAS OPEN_BRACKET etiqueta condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {:
@@ -443,8 +454,15 @@ etiqueta ::= {:
 :};
 // sentencia if 
 sentence ::= sentencia_si{:
-	reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+1));
-	System.out.println("Parser: sentence -> sentencia_si\n\n");
+	if(es_and == true){
+		reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+1));
+		reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+1));
+		System.out.println("Parser: sentence -> sentencia_si\n\n");
+		es_and = false;
+	}else{
+		reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+1));
+		System.out.println("Parser: sentence -> sentencia_si\n\n");
+	}
 :};
 
 sentencia_si ::= SI OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_BRACKET block CLOSE_CURLY_BRACKET {:
@@ -464,11 +482,21 @@ sentencia_si_sino ::= SI OPEN_BRACKET condition_group CLOSE_BRACKET OPEN_CURLY_B
 
 else ::= {:
 	
+	if(es_and == true){
+		reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+3));
+		reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+3));
+		System.out.println("Parser: sentence -> sentencia_si_sino\n\n");
+		es_and = false;
+		insertarEnPolaca("BI");
+		insertarEnPolaca("#");
+		pila.add(getSizePolaca());//ubicacion de salto si condicion del if es falsa	
+	}else{
 	reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+3));// CMP BXX #NUM +1 posicion siguiente, +2 saltea BI #NUM
 	insertarEnPolaca("BI");
 	insertarEnPolaca("#");
 	pila.add(getSizePolaca());//ubicacion de salto si condicion del if es falsa
 	//System.out.println("*******************************************");
+	}
 :};
 
 //se crea un grupo de condiciones para abarcar todas los tipos de condicionales, ya sea de una condicion sola, una condicion sola pero negada o condiciones dobles
@@ -482,9 +510,12 @@ condition_group ::= NOT condition {:
 
 condition_group ::= condition AND condition {:
 	System.out.println("Parser: condition_group -> condition AND condition");
+	es_and = true;
 :};
 
-condition_group ::= condition OR condition {:
+condition_group ::= condition{:
+	reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+1));
+:} OR condition {:
 	System.out.println("Parser: condition_group -> condition OR condition");
 :};
 
