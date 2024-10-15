@@ -37,6 +37,10 @@ si (NOT a1 OR NOT b2){
 	leer("Hola")
 }
 
+mientras (a1 == 2 AND b2 < 3){
+	a1 := a1 + 1
+}
+
 a1 := b2 * 3  + (b2 + 1) - edad
 
 a1 := binaryCount([110,1,0,5,a1,1010, 1])
