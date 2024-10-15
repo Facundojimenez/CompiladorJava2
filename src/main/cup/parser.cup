@@ -32,6 +32,24 @@ public void insertar(String nombre, String tipo, String valor, boolean esConstan
     tabla.add(nombre,tipo,valor,longitud, esConstante);
  }
 
+ public String negacion(String condicional){
+	switch (condicional) {
+        case "BLE":
+            return "BGT";
+        case "BLT":
+            return "BGE";
+        case "BGE":
+            return "BLT";
+        case "BGT":
+            return "BLE";
+        case "BNE":
+            return "BEQ";
+        case "BEQ":
+            return "BNE";
+        default:
+            return "???";
+        }
+ }
  public void insertarEnPolaca(String elemento){
  	PolacaInversa.getPolacaInversa().insertar(elemento);
  }
@@ -522,6 +540,8 @@ condition_group ::= condition {:
 :};
 
 condition_group ::= NOT condition {:
+	int pos = pila.peek()-2;
+	reemplazarEnPolaca(pos,negacion(condicional)); 
 	System.out.println("Parser: condition_group -> NOT condition");
 :};
 
@@ -545,10 +565,6 @@ condition ::= expression op_logico expression {:
 :};
 
 condition ::= NOT expression {:
-	insertarEnPolaca("CMP");
-	insertarEnPolaca(condicional);
-	insertarEnPolaca("#");
-	pila.add(getSizePolaca());
 	System.out.println("Parser: condition -> NOT expression");
 :};
 
