@@ -14,6 +14,7 @@ class Parser;
 action code {:
 
 boolean es_and = false;
+int pos;
 
 int binary_count;
 String factor_binary;
@@ -551,8 +552,12 @@ condition_group ::= condition AND condition {:
 :};
 
 condition_group ::= condition{:
-	reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+1));
+	reemplazarEnPolaca(pila.pop()-1,Integer.toString(getSizePolaca()+3));
+	insertarEnPolaca("BI");
+	insertarEnPolaca("#");
+	pos = getSizePolaca();
 :} OR condition {:
+	reemplazarEnPolaca(pos-1,Integer.toString(getSizePolaca()+1));
 	System.out.println("Parser: condition_group -> condition OR condition");
 :};
 
