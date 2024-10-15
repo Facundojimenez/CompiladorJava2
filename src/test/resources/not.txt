@@ -2,6 +2,6 @@ init {
     a1, c1, d1 : Int
 }
 
-si ( NOT a1) {
+si ( NOT a1 == d1) {
 	c1 := d1
 }
