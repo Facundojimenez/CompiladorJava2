@@ -33,7 +33,7 @@ sino {
 	escribir("d4 no es igual a d5 o d6")
 }
 
-si (NOT a1 == 1 OR NOT b2 == 1){
+si (NOT a1 == 1){
 	leer("Hola")
 }
 
