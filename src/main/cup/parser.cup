@@ -16,9 +16,6 @@ action code {:
 boolean es_and = false;
 int pos;
 
-int binary_count;
-String factor_binary;
-
 public Stack<Integer> pila = new Stack();
 public Stack<String> pilaTipoDato = new Stack();
 public String condicional;
@@ -86,16 +83,6 @@ public void insertar(String nombre, String tipo, String valor, boolean esConstan
 
 public void apilarTipoDatoCte(String tipoDato){
   pilaTipoDato.add(tipoDato);
-}
-
-public boolean isBinary(String s) {
-	for (char c : s.toCharArray()) {
-        if (c != '0' && c != '1') {
-            return false;
-        }
-    }
-
-	return true;
 }
 
 public void resolverTipoDatoAsignacion() throws InvalidAsignmentException {
@@ -257,7 +244,7 @@ assignment ::= IDENTIFIER:id ASSIG expression {:
 assignment ::= IDENTIFIER:id ASSIG sentencia_binarycount {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG sentencia_binarycount");
 	verificarId(id);
-	insertarEnPolaca(Integer.toString(binary_count));
+	insertarEnPolaca("@binaryCount");
 	insertarEnPolaca(id.toString());
 	insertarEnPolaca("=");
 :};
@@ -335,7 +322,6 @@ factor ::= INTEGER_CONSTANT:constant {:
 
 	insertar(constant.toString(), "INT", constant.toString(), true);
 	insertarEnPolaca(constant.toString());
-	factor_binary = constant.toString();
 :};
 factor ::= FLOAT_CONSTANT:constant {:
 	System.out.println("Parser: factor -> FLOAT_CONSTANT (" + constant + ")");
@@ -612,18 +598,9 @@ lista ::= OPEN_SQUARE_BRACKET elementos_lista CLOSE_SQUARE_BRACKET  {:
 :};
 elementos_lista ::= elementos_lista COMMA factor {:
 	System.out.println("Parser: sentencia_binarycount -> elementos_lista COMMA factor");
-
-	if(isBinary(factor_binary)) {
-		binary_count++;
-	}
 :};
 elementos_lista ::= factor {:
 	System.out.println("Parser: sentencia_binarycount -> factor");
-	binary_count = 0;
-
-	if(isBinary(factor_binary)) {
-		binary_count++;
-	}
 :};
 
 //sentencia triangulo
