@@ -54,4 +54,7 @@ public class SymbolTable {
         return tabla.get(nombre);
     }
 
+    public void emptySymbolTableContent(){
+        tabla.clear();
+    }
 }

@@ -70,6 +70,11 @@ public void insertar(String nombre, String tipo, String valor, boolean esConstan
 	}
  }
 
+ public boolean idExisteEnTablaSimbolo(String lexema){
+   SymbolTable tabla = SymbolTable.getSymbolTable();
+	return tabla.exists(lexema);
+ }
+
  public String obtenerTipoDato(String lexema){
  	SymbolTable tabla = SymbolTable.getSymbolTable();
  	Simbolo simboloObtenido = tabla.getSymbol(lexema);
@@ -257,11 +262,21 @@ assignment ::= IDENTIFIER:id ASSIG sentencia_triangulo {:
 :};
 assignment ::= IDENTIFIER:id ASSIG STRING_CONSTANT:constant {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG STRING_CONSTANT (" + constant + ")");
+
 	verificarId(id);
+
 	//se eliminan los "" de la cte antes de almacenar en la tabla.
 	String s = constant.toString();
 	s = s.substring(1,s.length()-1);
 	insertar(s, "STRING", s, true);
+
+	apilarTipoDatoCte("STRING");
+    apilarTipoDatoId(id.toString());
+
+	resolverTipoDatoAsignacion();
+
+
+
 
 	insertarEnPolaca(constant.toString());
 	insertarEnPolaca(id.toString());
@@ -365,22 +380,31 @@ lista_identificadores ::=  IDENTIFIER:id {:
 tipo_dato ::= INT {:
 	System.out.println("Parser: tipo_dato -> Int");
 	for (String id : variables) {
-            insertar(id.toString(), "INT", null, false);
-        }
+		if(idExisteEnTablaSimbolo(id)){
+			throw new AlreadyDeclaredIdException("No se puede declarar el id " + id + " mas de una vez.");
+		}
+		insertar(id, "INT", null, false);
+  	}
 	variables.clear();
 :};
 tipo_dato ::= FLOAT {:
 	System.out.println("Parser: tipo_dato -> Float");
 	for (String id : variables) {
-            insertar(id.toString(), "FLOAT", null, false);
-        }
+		if(idExisteEnTablaSimbolo(id)){
+			throw new AlreadyDeclaredIdException("No se puede declarar el id " + id + " mas de una vez.");
+		}
+		insertar(id.toString(), "FLOAT", null, false);
+	}
 	variables.clear();
 :};
 tipo_dato ::= STRING {:
 	System.out.println("Parser: tipo_dato -> String");
 	for (String id : variables) {
-            insertar(id.toString(), "STRING", null, false);
-        }
+		if(idExisteEnTablaSimbolo(id)){
+			throw new AlreadyDeclaredIdException("No se puede declarar el id " + id + " mas de una vez.");
+		}
+	  	insertar(id.toString(), "STRING", null, false);
+	}
 	variables.clear();
 :};
 
@@ -605,14 +629,14 @@ elementos_lista ::= factor {:
 
 //sentencia triangulo
 sentencia_triangulo ::= TRIANGULO OPEN_BRACKET expression COMMA {:
-	insertarEnPolaca("L1");
+	insertarEnPolaca("@L1");
 	insertarEnPolaca("=");
 
 :} expression COMMA {:
-	insertarEnPolaca("L2");
+	insertarEnPolaca("@L2");
 	insertarEnPolaca("=");
 :} expression  {:
-	insertarEnPolaca("L3");
+	insertarEnPolaca("@L3");
 	insertarEnPolaca("=");
 :} CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_triangulo -> TRIANGULO OPEN_BRACKET factor COMMA factor COMMA factor CLOSE_BRACKET");
@@ -622,16 +646,16 @@ sentencia_triangulo ::= TRIANGULO OPEN_BRACKET expression COMMA {:
 	insertarEnPolaca("@tipoTriangulo");
 	insertarEnPolaca("=");
 
-	//if de verificación de triangulo equilatero:  L1 == L2 AND L2 == L3
-	insertarEnPolaca("L1");
-	insertarEnPolaca("L2");
+	//if de verificación de triangulo equilatero:  @L1 == @L2 AND @L2 == @L3
+	insertarEnPolaca("@L1");
+	insertarEnPolaca("@L2");
 	insertarEnPolaca("CMP");
 	insertarEnPolaca("BNE");
 	pila.add(getSizePolaca());
 	avanzarPolaca();
 
-	insertarEnPolaca("L2");
-	insertarEnPolaca("L3");
+	insertarEnPolaca("@L2");
+	insertarEnPolaca("@L3");
 	insertarEnPolaca("CMP");
 	insertarEnPolaca("BNE");
 	pila.add(getSizePolaca());
@@ -647,23 +671,23 @@ sentencia_triangulo ::= TRIANGULO OPEN_BRACKET expression COMMA {:
 	avanzarPolaca();
 
 //
-//	//if de verificación de triangulo escaleno:  L1 != L2  AND L1 != L3 AND L2 != L3
-	insertarEnPolaca("L1");
-	insertarEnPolaca("L2");
+//	//if de verificación de triangulo escaleno:  @L1 != @L2  AND @L1 != @L3 AND @L2 != @L3
+	insertarEnPolaca("@L1");
+	insertarEnPolaca("@L2");
 	insertarEnPolaca("CMP");
 	insertarEnPolaca("BEQ");
 	pila.add(getSizePolaca());
 	avanzarPolaca();
 //
-	insertarEnPolaca("L1");
-	insertarEnPolaca("L3");
+	insertarEnPolaca("@L1");
+	insertarEnPolaca("@L3");
 	insertarEnPolaca("CMP");
 	insertarEnPolaca("BEQ");
 	pila.add(getSizePolaca());
 	avanzarPolaca();
 
-	insertarEnPolaca("L2");
-	insertarEnPolaca("L3");
+	insertarEnPolaca("@L");
+	insertarEnPolaca("@L3");
 	insertarEnPolaca("CMP");
 	insertarEnPolaca("BEQ");
 	pila.add(getSizePolaca());
