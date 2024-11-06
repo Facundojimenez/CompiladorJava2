@@ -30,6 +30,11 @@ public void insertar(String nombre, String tipo, String valor, boolean esConstan
     tabla.add(nombre,tipo,valor,longitud, esConstante);
  }
 
+ public void actualizarUsoId(String id) {
+ 	SymbolTable tabla = SymbolTable.getSymbolTable();
+ 	tabla.markSymbolAsUsed(id);
+ }
+
  public String negacion(String condicional){
 	switch (condicional) {
         case "BLE":
@@ -110,7 +115,19 @@ public void resolverTipoDatoOpAritmetica() throws InvalidAritmeticOperationExcep
 
 }
 
+public void resolverTipoDatoComparacion() throws InvalidComparisonException {
+
+	String leftSide = pilaTipoDato.pop();
+	String rightSide = pilaTipoDato.pop();
+
+	String tipoResultante = TablaSintesis.resolverTipoDatoComparacion(leftSide, rightSide);
+}
+
 :};
+
+
+
+
 
 // Terminals
 
@@ -219,6 +236,7 @@ non terminal sentencia_triangulo;
 non terminal condition_group;
 non terminal condition;
 non terminal op_logico;
+non terminal elem_condition;
 
 
 // Start Symbol Definition
@@ -325,6 +343,8 @@ factor ::= IDENTIFIER:id  {:
 
 	verificarId(id);
 
+	actualizarUsoId(id.toString());
+
 	apilarTipoDatoId(id.toString());
 
 	insertarEnPolaca(id.toString());
@@ -415,6 +435,8 @@ sentence ::= sentencia_leer {:
 
 sentencia_leer ::= LEER OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_leer ::= LEER OPEN_BRACKET IDENTIFIER (" + id + ") CLOSE_BRACKET");
+
+	actualizarUsoId(id.toString());
 	verificarId(id);
 	insertarEnPolaca("Leer");
 	insertarEnPolaca(id.toString());
@@ -448,6 +470,8 @@ sentence ::= sentencia_escribir {:
 
 sentencia_escribir ::= ESCRIBIR OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {:
 	System.out.println("Parser: sentencia_escribir ::= ESCRIBIR OPEN_BRACKET IDENTIFIER (" + id + ") CLOSE_BRACKET");
+
+	actualizarUsoId(id.toString());
 	verificarId(id);
 	insertarEnPolaca("Escribir");
 	insertarEnPolaca(id.toString());
@@ -571,13 +595,29 @@ condition_group ::= condition{:
 	System.out.println("Parser: condition_group -> condition OR condition");
 :};
 
-condition ::= expression op_logico expression {:
+condition ::= elem_condition op_logico elem_condition {:
+
+	resolverTipoDatoComparacion();
+
 	insertarEnPolaca("CMP");
 	insertarEnPolaca(condicional);
 	insertarEnPolaca("#");
 	pila.add(getSizePolaca());
 	System.out.println("Parser: condition -> expression op_logico expression");
 :};
+
+elem_condition ::= expression {:
+	System.out.println("Parser: elem_condition -> expression");
+:};
+elem_condition ::= STRING_CONSTANT:constant{:
+	//se eliminan los "" de la cte antes de almacenar en la tabla.
+	String s = constant.toString();
+	s = s.substring(1,s.length()-1);
+	insertar(s, "STRING", s, true);
+
+	apilarTipoDatoCte("STRING");
+  	System.out.println("Parser: elem_condition -> STRING_CONSTANT");
+ :};
 
 condition ::= NOT expression {:
 	System.out.println("Parser: condition -> NOT expression");

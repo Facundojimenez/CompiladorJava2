@@ -4,11 +4,13 @@ public class Simbolo {
     String tipo;
     String valor;
     int longitud;
+    boolean utilizado;
 
-    public Simbolo(String tipo,String valor,int longitud){
+    public Simbolo(String tipo,String valor,int longitud, boolean utilizado){
         this.tipo = tipo;
         this.valor = valor;
         this.longitud = longitud;
+        this.utilizado = utilizado;
     }
     public void setLongitud(int longitud) {
         this.longitud = longitud;
@@ -30,6 +32,6 @@ public class Simbolo {
     }
     @Override
     public String toString(){
-        return "Tipo: "+ tipo + "\t\t" + " Valor: " + valor  + "\t\t" + " Longitud: "+ longitud;
+        return "Tipo: "+ tipo + "\t\t" + " Valor: " + valor  + "\t\t" + " Longitud: "+ longitud +  "\t\t" + " Utilizado: " + utilizado;
     }
 }

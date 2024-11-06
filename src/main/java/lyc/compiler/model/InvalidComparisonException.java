@@ -1,8 +1,8 @@
 package lyc.compiler.model;
 
-public class InvalidAsignmentException extends CompilerException{
+public class InvalidComparisonException extends CompilerException{
 
-    public InvalidAsignmentException(String message) {
+    public InvalidComparisonException(String message) {
         super(message);
     }
 }
