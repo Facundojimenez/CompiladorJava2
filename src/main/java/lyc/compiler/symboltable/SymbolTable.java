@@ -34,7 +34,7 @@ public class SymbolTable {
 
         //agregar si no existe
         if (!this.tabla.containsKey(nombre)){
-            this.tabla.put(nombre,new Simbolo(tipo,valor,longitud, false));
+            this.tabla.put(nombre,new Simbolo(nombre, tipo,valor,longitud, false));
             return;
         } 
         //manejar duplicados aqui
@@ -64,12 +64,10 @@ public class SymbolTable {
 
     public ArrayList<String> getUnusedSymbols (){
         ArrayList<String> unusedSymbolsList = new ArrayList<String>();
-        for (Map.Entry<String, Simbolo> entry : tabla.entrySet()) {
-            String key = entry.getKey();
-            Simbolo simbolo = entry.getValue();
+        for (Simbolo simbolo: tabla.values()) {
 
             if(simbolo.valor == null && !simbolo.utilizado){
-                unusedSymbolsList.add(key);
+                unusedSymbolsList.add(simbolo.nombre);
             }
         }
         return unusedSymbolsList;
@@ -89,4 +87,7 @@ public class SymbolTable {
         tabla.replace(nombre, elemento);
     }
 
+    public HashMap<String, Simbolo> getTabla() {
+        return tabla;
+    }
 }
