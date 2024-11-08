@@ -244,7 +244,7 @@ assignment ::= IDENTIFIER:id ASSIG expression {:
 assignment ::= IDENTIFIER:id ASSIG sentencia_binarycount {:
 	System.out.println("Parser: assignment -> IDENTIFIER (" + id + ")  ASSIG sentencia_binarycount");
 	verificarId(id);
-	insertarEnPolaca("@binaryCount");
+	insertarEnPolaca("@cantidadDeBinarios");
 	insertarEnPolaca(id.toString());
 	insertarEnPolaca("=");
 :};
@@ -598,9 +598,146 @@ lista ::= OPEN_SQUARE_BRACKET elementos_lista CLOSE_SQUARE_BRACKET  {:
 :};
 elementos_lista ::= elementos_lista COMMA factor {:
 	System.out.println("Parser: sentencia_binarycount -> elementos_lista COMMA factor");
+	
+	insertarEnPolaca("num");
+	insertarEnPolaca("=");
+	
+	insertarEnPolaca("0");
+	insertarEnPolaca("@cantidadDeBinarios");
+	insertarEnPolaca("=");
+
+	// verifico si el numero es un binario dentro de un while
+	pos = getSizePolaca();
+	insertarEnPolaca("num");
+	insertarEnPolaca("0");
+	insertarEnPolaca("CMP");
+	insertarEnPolaca("BEQ");
+	pila.add(getSizePolaca());
+	avanzarPolaca();
+
+	insertarEnPolaca("num");
+	insertarEnPolaca("10");
+	insertarEnPolaca("/");
+	insertarEnPolaca("cociente");
+	insertarEnPolaca("=");
+
+	insertarEnPolaca("num");
+	insertarEnPolaca("cociente");
+	insertarEnPolaca("10");
+	insertarEnPolaca("*");
+	insertarEnPolaca("-");
+	insertarEnPolaca("digito");
+	insertarEnPolaca("=");
+
+	// chequeo si el digito no es igual a 0
+	insertarEnPolaca("digito");
+	insertarEnPolaca("0");
+	insertarEnPolaca("CMP");
+	insertarEnPolaca("BNE");
+	pila.add(getSizePolaca());
+	avanzarPolaca();
+
+	// chequeo si el digito no es igual a 1
+	insertarEnPolaca("digito");
+	insertarEnPolaca("1");
+	insertarEnPolaca("CMP");
+	insertarEnPolaca("BNE");
+	pila.add(getSizePolaca());
+	avanzarPolaca();
+
+	// elimino el digito que chequie
+	insertarEnPolaca("num");
+	insertarEnPolaca("10");
+	insertarEnPolaca("/");
+	insertarEnPolaca("num");
+	insertarEnPolaca("=");
+
+	// vuelvo al comienzo del while
+	insertarEnPolaca("BI");
+	insertarEnPolaca(pos.toString());
+
+	// desapilo los saltos
+	reemplazarEnPolaca(pila.pop(), Integer.toString(getSizePolaca()+6));
+	reemplazarEnPolaca(pila.pop(), Integer.toString(getSizePolaca()+6));
+	reemplazarEnPolaca(pila.pop(), Integer.toString(getSizePolaca()));
+
+	// cuento si es binario
+	insertarEnPolaca("@cantidadDeBinarios");
+	insertarEnPolaca("1");
+	insertarEnPolaca("+");
+	insertarEnPolaca("@cantidadDeBinarios");
+	insertarEnPolaca("=");
 :};
 elementos_lista ::= factor {:
 	System.out.println("Parser: sentencia_binarycount -> factor");
+	insertarEnPolaca("num");
+	insertarEnPolaca("=");
+	
+	insertarEnPolaca("0");
+	insertarEnPolaca("@cantidadDeBinarios");
+	insertarEnPolaca("=");
+
+	// verifico si el numero es un binario dentro de un while
+	pos = getSizePolaca();
+	insertarEnPolaca("num");
+	insertarEnPolaca("0");
+	insertarEnPolaca("CMP");
+	insertarEnPolaca("BEQ");
+	pila.add(getSizePolaca());
+	avanzarPolaca();
+
+	insertarEnPolaca("num");
+	insertarEnPolaca("10");
+	insertarEnPolaca("/");
+	insertarEnPolaca("cociente");
+	insertarEnPolaca("=");
+
+	insertarEnPolaca("num");
+	insertarEnPolaca("cociente");
+	insertarEnPolaca("10");
+	insertarEnPolaca("*");
+	insertarEnPolaca("-");
+	insertarEnPolaca("digito");
+	insertarEnPolaca("=");
+
+	// chequeo si el digito no es igual a 0
+	insertarEnPolaca("digito");
+	insertarEnPolaca("0");
+	insertarEnPolaca("CMP");
+	insertarEnPolaca("BNE");
+	pila.add(getSizePolaca());
+	avanzarPolaca();
+
+	// chequeo si el digito no es igual a 1
+	insertarEnPolaca("digito");
+	insertarEnPolaca("1");
+	insertarEnPolaca("CMP");
+	insertarEnPolaca("BNE");
+	pila.add(getSizePolaca());
+	avanzarPolaca();
+
+	// elimino el digito que chequie
+	insertarEnPolaca("num");
+	insertarEnPolaca("10");
+	insertarEnPolaca("/");
+	insertarEnPolaca("num");
+	insertarEnPolaca("=");
+
+	// vuelvo al comienzo del while
+	insertarEnPolaca("BI");
+	insertarEnPolaca(pos.toString());
+
+	// desapilo los saltos
+	reemplazarEnPolaca(pila.pop(), Integer.toString(getSizePolaca()+6));
+	reemplazarEnPolaca(pila.pop(), Integer.toString(getSizePolaca()+6));
+	reemplazarEnPolaca(pila.pop(), Integer.toString(getSizePolaca()));
+
+	// cuento si es binario
+	insertarEnPolaca("@cantidadDeBinarios");
+	insertarEnPolaca("1");
+	insertarEnPolaca("+");
+	insertarEnPolaca("@cantidadDeBinarios");
+	insertarEnPolaca("=");
 :};
 
 //sentencia triangulo
