@@ -1,6 +1,8 @@
 package lyc.compiler.symboltable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SymbolTable {
     static private SymbolTable instancia = null; //clase singleton
@@ -32,7 +34,7 @@ public class SymbolTable {
 
         //agregar si no existe
         if (!this.tabla.containsKey(nombre)){
-            this.tabla.put(nombre,new Simbolo(tipo,valor,longitud));
+            this.tabla.put(nombre,new Simbolo(nombre, tipo,valor,longitud, false));
             return;
         } 
         //manejar duplicados aqui
@@ -42,16 +44,50 @@ public class SymbolTable {
     @Override
     public String toString(){
         String out = "";
+
         for (String k : tabla.keySet()) {
             out+="Nombre: " + k + "\t\t" + tabla.get(k) + "\n";
         }
+
+        ArrayList<String> simbolosSinUtilizar = this.getUnusedSymbols();
+
+        if(!simbolosSinUtilizar.isEmpty()){
+            out += "\n\nWARNING -> Simbolos sin utilizar: \n";
+            for(String elem : getUnusedSymbols()){
+                out += elem + ", ";
+            }
+
+        }
+
         return out;
     }
 
+    public ArrayList<String> getUnusedSymbols (){
+        ArrayList<String> unusedSymbolsList = new ArrayList<String>();
+        for (Simbolo simbolo: tabla.values()) {
 
+            if(simbolo.valor == null && !simbolo.utilizado){
+                unusedSymbolsList.add(simbolo.nombre);
+            }
+        }
+        return unusedSymbolsList;
+    }
 
     public Simbolo getSymbol(String nombre){
         return tabla.get(nombre);
     }
 
+    public void emptySymbolTableContent(){
+        tabla.clear();
+    }
+
+    public void markSymbolAsUsed(String nombre){
+        Simbolo elemento = tabla.get(nombre);
+        elemento.utilizado = true;
+        tabla.replace(nombre, elemento);
+    }
+
+    public HashMap<String, Simbolo> getTabla() {
+        return tabla;
+    }
 }

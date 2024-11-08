@@ -7,6 +7,7 @@
 
 ``
 mount c <<tu directorio>>
+H:\COMPILADORES_2024\compiler-java\src\main\resources\asm
 ``
 
 Nota: reemplazar "tu directorio" con la ruta absoluta de este directorio.

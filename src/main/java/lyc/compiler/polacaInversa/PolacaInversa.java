@@ -49,4 +49,7 @@ public class PolacaInversa {
         return numeracion+"\n"+out;
     }
 
+    public ArrayList<String> getListaElementos() {
+        return listaElementos;
+    }
 }
