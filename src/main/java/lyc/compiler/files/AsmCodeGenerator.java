@@ -65,24 +65,27 @@ public class AsmCodeGenerator implements FileGenerator {
             System.out.println(celda);
 
             if(celdaEsOperador(celda)){
-                System.out.println("pila");
-                System.out.println(pilaOperandos.size());
-                String op2 = pilaOperandos.pop();
-                String op1 = pilaOperandos.pop();
+//                System.out.println("pila");
+//                System.out.println(pilaOperandos.size());
+                String op2Key = pilaOperandos.pop();
+                String op2 = op2Key != "@aux" ? SymbolTable.getSymbolTable().getSymbol(op2Key).getNombre() : "@aux";
+
+                String op1Key = pilaOperandos.pop();
+                String op1 = op1Key != "@aux" ? SymbolTable.getSymbolTable().getSymbol(op1Key).getNombre() : "@aux";
                 switch (celda){
                     case "+":
-                        fileWriter.write("FLD _" + op1 + "\n");
+                        fileWriter.write("FLD " + op1 + "\n");
                         if(op2 != "@aux"){
-                            fileWriter.write("FLD _" + op2 + "\n");
+                            fileWriter.write("FLD " + op2 + "\n");
                         }
 
                         fileWriter.write("FADD"+ "\n\n");
                         pilaOperandos.add("@aux");
                         break;
                     case "-":
-                        fileWriter.write("FLD _" + op1 + "\n");
+                        fileWriter.write("FLD " + op1 + "\n");
                         if(op2 != "@aux"){
-                            fileWriter.write("FLD _" + op2 + "\n");
+                            fileWriter.write("FLD " + op2 + "\n");
                         }
 
 
@@ -90,18 +93,18 @@ public class AsmCodeGenerator implements FileGenerator {
                         pilaOperandos.add("@aux");
                         break;
                     case "*":
-                        fileWriter.write("FLD _" + op1 + "\n");
+                        fileWriter.write("FLD " + op1 + "\n");
                         if(op2 != "@aux"){
-                            fileWriter.write("FLD _" + op2 + "\n");
+                            fileWriter.write("FLD " + op2 + "\n");
                         }
 
                         fileWriter.write("FMUL"+ "\n\n");
                         pilaOperandos.add("@aux");
                         break;
                     case "/":
-                        fileWriter.write("FLD _" + op1 + "\n");
+                        fileWriter.write("FLD " + op1 + "\n");
                         if(op2 != "@aux"){
-                            fileWriter.write("FLD _" + op2 + "\n");
+                            fileWriter.write("FLD " + op2 + "\n");
                         }
 
                         fileWriter.write("FDIV"+ "\n\n");
@@ -109,15 +112,15 @@ public class AsmCodeGenerator implements FileGenerator {
                         break;
                     case "=":
                         if(op1 != "@aux"){
-                            fileWriter.write("FLD _" + op1 + "\n");
+                            fileWriter.write("FLD " + op1 + "\n");
                         }
                         fileWriter.write("FSTP " + op2 + "\n\n");
                         break;
                     case "BLT":
                         if(op1 != "@aux"){
-                            fileWriter.write("FLD _" + op1 + "\n");
+                            fileWriter.write("FLD " + op1 + "\n");
                         }
-                        fileWriter.write("FLD _" + op2 + "\n\n");
+                        fileWriter.write("FLD " + op2 + "\n\n");
 
                         fileWriter.write("FXCH" + "\n");
                         fileWriter.write("FCOM" + "\n");
@@ -126,7 +129,7 @@ public class AsmCodeGenerator implements FileGenerator {
 
 
                         etiqSalto = ETIQUETA_SALTO + indiceSalto;
-                        fileWriter.write("JLT " + etiqSalto + "\n\n");
+                        fileWriter.write("JB " + etiqSalto + "\n\n");
 
                         pilaEtiqSalto.add(etiqSalto);
                         indiceSalto++;
@@ -152,7 +155,7 @@ public class AsmCodeGenerator implements FileGenerator {
 
             /// Luego de cada celda evaluo si tengo apilada una etiqueta de salto y si ya tengo que insertar la etiquta apilada o no
             if(!pilaCeldaParaSaltar.isEmpty()  && pilaCeldaParaSaltar.peek() == contadorCeldaPolaca){
-                fileWriter.write(pilaEtiqSalto.pop() + "\n\n");
+                fileWriter.write(pilaEtiqSalto.pop() + ":" + "\n\n");
             }
             contadorCeldaPolaca++;
 
@@ -160,7 +163,7 @@ public class AsmCodeGenerator implements FileGenerator {
 
         ///Se vuelve a hacer el if al final de recorrer la polaca por si la ultima sentencia fue un if
         if(!pilaCeldaParaSaltar.isEmpty()  && pilaCeldaParaSaltar.peek() == contadorCeldaPolaca){
-            fileWriter.write(pilaEtiqSalto.pop() + "\n\n");
+            fileWriter.write(pilaEtiqSalto.pop() + ":" + "\n\n");
         }
 
 

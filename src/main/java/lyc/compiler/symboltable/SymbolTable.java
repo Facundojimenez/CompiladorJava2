@@ -25,6 +25,7 @@ public class SymbolTable {
     }
 
     public void add(String nombre,String tipo,String valor,int longitud, boolean esConstante){
+        String nombreOriginal = nombre;
         nombre = nombre.replace(" ","_");//para evitar problemas al pasar el codigo a ASM
 
         //En caso de que un token sea CTE de algun tipo, se le agrega un "_"
@@ -34,7 +35,7 @@ public class SymbolTable {
 
         //agregar si no existe
         if (!this.tabla.containsKey(nombre)){
-            this.tabla.put(nombre,new Simbolo(nombre, tipo,valor,longitud, false));
+            this.tabla.put(nombreOriginal,new Simbolo(nombre, tipo,valor,longitud, false));
             return;
         } 
         //manejar duplicados aqui
@@ -46,7 +47,7 @@ public class SymbolTable {
         String out = "";
 
         for (String k : tabla.keySet()) {
-            out+="Nombre: " + k + "\t\t" + tabla.get(k) + "\n";
+            out+= tabla.get(k) + "\n";
         }
 
         ArrayList<String> simbolosSinUtilizar = this.getUnusedSymbols();
