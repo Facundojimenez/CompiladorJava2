@@ -504,13 +504,13 @@ sentence ::= sentencia_mientras {:
 		reemplazarEnPolaca(pila.pop()-1,"#" + Integer.toString(getSizePolaca()+3));
 		reemplazarEnPolaca(pila.pop()-1,"#" + Integer.toString(getSizePolaca()+3));
 		insertarEnPolaca("BI");
-		insertarEnPolaca(""+pila.pop());
+		insertarEnPolaca("#"+pila.pop());
 		System.out.println("Parser: sentence ::= sentencia_while\n\n");
 		es_and = false;
 	}else{
 		reemplazarEnPolaca(pila.pop()-1,"#" + Integer.toString(getSizePolaca()+3));
 		insertarEnPolaca("BI");
-		insertarEnPolaca(""+pila.pop());
+		insertarEnPolaca("#"+pila.pop());
 		System.out.println("Parser: sentence ::= sentencia_while\n\n");
 	}
 :};

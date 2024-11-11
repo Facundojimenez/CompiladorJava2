@@ -34,7 +34,7 @@ public class AsmCodeGenerator implements FileGenerator {
     @Override
     public void generate(FileWriter fileWriter) throws IOException {
         int indiceSalto = 1;
-        Stack<String> pilaEtiqSalto = new Stack<String>();
+        Queue<String> colaEtiqSalto = new LinkedList<>();
         Stack<Integer> pilaCeldaParaSaltar = new Stack<Integer>();
         String etiqSalto = "";
 
@@ -62,7 +62,13 @@ public class AsmCodeGenerator implements FileGenerator {
 
         //Codigo del programador
         for(String celda: polacaInversa){
-            System.out.println(celda);
+            System.out.println("\n\ncontadorPolaca: " + contadorCeldaPolaca);
+            System.out.println("celda: " + celda);
+
+            System.out.println("pila saltos etiq: ");
+            System.out.println(colaEtiqSalto.size());
+            System.out.println("pila celdas a saltar: ");
+            System.out.println(pilaCeldaParaSaltar.size());
 
             if(celdaEsOperador(celda)){
 //                System.out.println("pila");
@@ -131,7 +137,7 @@ public class AsmCodeGenerator implements FileGenerator {
                         etiqSalto = ETIQUETA_SALTO + indiceSalto;
                         fileWriter.write("JB " + etiqSalto + "\n\n");
 
-                        pilaEtiqSalto.add(etiqSalto);
+                        colaEtiqSalto.add(etiqSalto);
                         indiceSalto++;
 
                         break;
@@ -143,19 +149,43 @@ public class AsmCodeGenerator implements FileGenerator {
             else{
                 //si estoy en el else es que tengo una celda que no es operador, y aca evaluo que tipo de celda es.
                 //añado operando a la pila de operandos
-                if(!Objects.equals(celda, "CMP")){
+                if(!Objects.equals(celda, "CMP") && !Objects.equals(celda, "ET") && !Objects.equals(celda, "BI")){
                     pilaOperandos.add(celda);
                 }
 
                 //La celda es un numero de salto.
                 if(celda.startsWith("#")){
-                    pilaCeldaParaSaltar.add(Integer.valueOf(celda.substring(1)));
+                    if(Integer.parseInt(celda.substring(1)) > contadorCeldaPolaca){
+                        pilaCeldaParaSaltar.add(Integer.valueOf(celda.substring(1)));
+                    }
                 }
+
+
             }
 
             /// Luego de cada celda evaluo si tengo apilada una etiqueta de salto y si ya tengo que insertar la etiquta apilada o no
             if(!pilaCeldaParaSaltar.isEmpty()  && pilaCeldaParaSaltar.peek() == contadorCeldaPolaca){
-                fileWriter.write(pilaEtiqSalto.pop() + ":" + "\n\n");
+                System.out.println("SE INSERTA ETIQUETA  POR SALTO DE CELDA");
+                fileWriter.write(colaEtiqSalto.remove() + ":" + "\n\n");
+                pilaCeldaParaSaltar.pop();
+            }
+
+            //La celda es un numero de salto.
+            if(celda.equals("ET")){
+                etiqSalto = ETIQUETA_SALTO + indiceSalto;
+                fileWriter.write(etiqSalto + ":" + "\n\n");
+
+
+                colaEtiqSalto.add(etiqSalto);
+                indiceSalto++;
+            }
+
+            if(celda.equals("BI")){
+                System.out.println("SE INSERTA ETIQUETA JMP");
+//                fileWriter.write("CACAAA" + ":" + "\n\n");
+//                fileWriter.write("JMP" + ":" + "\n\n");
+
+                fileWriter.write("JMP " + colaEtiqSalto.remove() + "\n\n");
             }
             contadorCeldaPolaca++;
 
@@ -163,7 +193,9 @@ public class AsmCodeGenerator implements FileGenerator {
 
         ///Se vuelve a hacer el if al final de recorrer la polaca por si la ultima sentencia fue un if
         if(!pilaCeldaParaSaltar.isEmpty()  && pilaCeldaParaSaltar.peek() == contadorCeldaPolaca){
-            fileWriter.write(pilaEtiqSalto.pop() + ":" + "\n\n");
+            System.out.println("SE INSERTA ETIQUETA  POR SALTO DE CELDA");
+            fileWriter.write(colaEtiqSalto.remove() + ":" + "\n\n");
+            pilaCeldaParaSaltar.pop();
         }
 
 
